@@ -1,3 +1,9 @@
+import SignIn from "./components/SIgnIn";
+
 export default async function Home() {
-  return <main>Hello</main>;
+  return (
+    <main>
+      <SignIn />
+    </main>
+  );
 }
