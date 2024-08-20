@@ -10,7 +10,7 @@ const LoginForm = () => {
       cardTitle="Welcome Back!"
       showSocials
     >
-      <div>hey</div>
+      <div></div>
     </AuthCard>
   );
 };

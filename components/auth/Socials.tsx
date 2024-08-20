@@ -9,8 +9,8 @@ const Socials = () => {
   return (
     <div className="flex flex-col items-center w-full gap-4">
       <Button
-        variant="default"
-        className="flex gap-4"
+        variant="outline"
+        className="flex gap-4 w-full"
         onClick={() =>
           signIn("google", {
             redirect: false,
@@ -22,8 +22,8 @@ const Socials = () => {
         <FcGoogle className="w-5 h-5" />
       </Button>
       <Button
-        className="flex gap-4"
-        variant="default"
+        className="flex gap-4 w-full"
+        variant="outline"
         onClick={() =>
           signIn("github", {
             redirect: false,

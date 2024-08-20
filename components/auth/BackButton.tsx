@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 const BackButton = ({ href, label }: { href: string; label: string }) => {
   return (
-    <div>
+    <div className="w-full">
       <Button variant="secondary" className="font-medium w-full">
         <Link aria-label={label} href={href}>
           {label}
