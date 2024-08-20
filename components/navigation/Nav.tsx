@@ -1,3 +1,4 @@
+
 import { auth } from "@/server/auth";
 import Logo from "./Logo";
 import UserButton from "./UserButton";
@@ -11,7 +12,9 @@ const Nav = async () => {
       <nav>
         <ul className="flex justify-between items-center">
           <li className="">
-            <Logo />
+            <Link href="/">
+              <Logo />
+            </Link>
           </li>
           {!session ? (
             <li>
