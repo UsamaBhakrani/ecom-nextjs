@@ -7,7 +7,7 @@ import { LogIn } from "lucide-react";
 const Nav = async () => {
   const session = await auth();
   return (
-    <header className="bg-slate-400 py-4">
+    <header className="py-4">
       <nav>
         <ul className="flex justify-between items-center">
           <li className="">
@@ -17,7 +17,7 @@ const Nav = async () => {
             <li>
               <Button asChild className="flex gap-2">
                 <Link href="/auth/login">
-                  <LogIn size={16 } />
+                  <LogIn size={16} />
                   <span>Login</span>
                 </Link>
               </Button>
