@@ -15,18 +15,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { loginFormSchema } from "@/types/types";
+import Link from "next/link";
 
 const LoginForm = () => {
-  const formSchema = z.object({
-    email: z.string().email({ message: "Please input a valid email address" }),
-
-    password: z.string().min(8, {
-      message: "Password must be at least 8 characters.",
-    }),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -43,7 +37,7 @@ const LoginForm = () => {
       showSocials
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
           <FormField
             control={form.control}
             name="email"
@@ -51,7 +45,12 @@ const LoginForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="usamabhakrani@gmail.com" {...field} />
+                  <Input
+                    placeholder="usamabhakrani@gmail.com"
+                    {...field}
+                    type="email"
+                    autoComplete="email"
+                  />
                 </FormControl>
                 {/* <FormDescription>
                   This is your public display name.
@@ -67,12 +66,20 @@ const LoginForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="********" {...field} />
+                  <Input
+                    placeholder="********"
+                    {...field}
+                    type="password"
+                    autoComplete="current-password"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          <Button size={"sm"} variant={"link"} asChild>
+            <Link href="/auth/reset">Forgot your password?</Link>
+          </Button>
           <Button type="submit" className="w-full">
             Login
           </Button>
