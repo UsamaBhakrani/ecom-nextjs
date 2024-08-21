@@ -17,8 +17,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { loginFormSchema } from "@/types/types";
 import Link from "next/link";
+import { emailSignIn } from "@/server/actions/emailSignIn";
+import { useAction } from "next-safe-action/hooks";
 
 const LoginForm = () => {
+  const { execute, status, result } = useAction(emailSignIn);
+
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -27,7 +31,9 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmit = () => {};
+  const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
+    console.log(values);
+  };
 
   return (
     <AuthCard
