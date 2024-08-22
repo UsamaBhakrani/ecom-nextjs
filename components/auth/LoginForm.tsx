@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,9 +18,14 @@ import { loginFormSchema } from "@/types/types";
 import Link from "next/link";
 import { emailSignIn } from "@/server/actions/emailSignIn";
 import { useAction } from "next-safe-action/hooks";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 const LoginForm = () => {
-  const { execute, status, result } = useAction(emailSignIn);
+  const [error, setError] = useState("");
+  const { execute, status } = useAction(emailSignIn, {
+    onSuccess: (data) => console.log(data),
+  });
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -32,7 +36,7 @@ const LoginForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
-    console.log(values);
+    execute(values);
   };
 
   return (
@@ -58,9 +62,6 @@ const LoginForm = () => {
                     autoComplete="email"
                   />
                 </FormControl>
-                {/* <FormDescription>
-                  This is your public display name.
-                </FormDescription> */}
                 <FormMessage />
               </FormItem>
             )}
@@ -86,7 +87,13 @@ const LoginForm = () => {
           <Button size={"sm"} variant={"link"} asChild>
             <Link href="/auth/reset">Forgot your password?</Link>
           </Button>
-          <Button type="submit" className="w-full">
+          <Button
+            type="submit"
+            className={cn(
+              "w-full",
+              status === "executing" ? "animate-pulse" : ""
+            )}
+          >
             Login
           </Button>
         </form>
