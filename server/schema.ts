@@ -49,3 +49,17 @@ export const accounts = pgTable(
     }),
   })
 );
+
+export const emailTokens = pgTable(
+  "emailToken",
+  {
+    id: text("id").notNull(),
+    token: text("token").notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
+  },
+  (emailToken) => ({
+    compositePk: primaryKey({
+      columns: [emailToken.id, emailToken.token],
+    }),
+  })
+);

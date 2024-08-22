@@ -15,6 +15,20 @@
       "when": 1724254216116,
       "tag": "0001_parallel_robin_chapel",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1724348745478,
+      "tag": "0002_yellow_mimic",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1724348799015,
+      "tag": "0003_whole_mac_gargan",
+      "breakpoints": true
     }
   ]
 }
