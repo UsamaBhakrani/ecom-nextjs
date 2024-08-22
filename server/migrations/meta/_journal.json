@@ -29,6 +29,13 @@
       "when": 1724348799015,
       "tag": "0003_whole_mac_gargan",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1724349027306,
+      "tag": "0004_bitter_devos",
+      "breakpoints": true
     }
   ]
 }

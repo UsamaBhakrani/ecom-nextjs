@@ -51,15 +51,15 @@ export const accounts = pgTable(
 );
 
 export const emailTokens = pgTable(
-  "emailToken",
+  "email_tokens",
   {
     id: text("id").notNull(),
     token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
   },
-  (emailToken) => ({
+  (email_tokens) => ({
     compositePk: primaryKey({
-      columns: [emailToken.id, emailToken.token],
+      columns: [email_tokens.id, email_tokens.token],
     }),
   })
 );
