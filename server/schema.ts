@@ -56,6 +56,7 @@ export const emailTokens = pgTable(
     id: text("id").notNull(),
     token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
+    email: text("email").notNull(),
   },
   (email_tokens) => ({
     compositePk: primaryKey({
