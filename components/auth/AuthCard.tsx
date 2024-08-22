@@ -27,7 +27,7 @@ const AuthCard = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{cardTitle}</CardTitle>
+        <CardTitle className="text-2xl">{cardTitle}</CardTitle>
       </CardHeader>
       <CardContent>{children}</CardContent>
       {showSocials && (

@@ -16,14 +16,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { loginFormSchema } from "@/types/types";
 import Link from "next/link";
-import { emailSignIn } from "@/server/actions/emailSignIn";
+import { emailSignUp } from "@/server/actions/emailSignUp";
 import { useAction } from "next-safe-action/hooks";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const [error, setError] = useState("");
-  const { execute, status } = useAction(emailSignIn, {
+  const { execute, status } = useAction(emailSignUp, {
     onSuccess: (data) => console.log(data),
   });
 
@@ -41,9 +41,9 @@ const LoginForm = () => {
 
   return (
     <AuthCard
-      backButtonHref="/auth/register"
-      backButtonLabel="Create a new account"
-      cardTitle="Login"
+      backButtonHref="/auth/login"
+      backButtonLabel="Already have an account? Login"
+      cardTitle="Create a new account"
       showSocials
     >
       <Form {...form}>
@@ -94,7 +94,7 @@ const LoginForm = () => {
               status === "executing" ? "animate-pulse" : ""
             )}
           >
-            Login
+            Create Account
           </Button>
         </form>
       </Form>
@@ -102,4 +102,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
