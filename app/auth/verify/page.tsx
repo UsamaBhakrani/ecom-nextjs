@@ -1,9 +1,5 @@
-import React from 'react'
+const EmailVerification = () => {
+  return <div>EmailVerification</div>;
+};
 
-const page = () => {
-  return (
-    <div>page</div>
-  )
-}
-
-export default page
+export default EmailVerification;

@@ -20,11 +20,17 @@ import { emailSignUp } from "@/server/actions/emailSignUp";
 import { useAction } from "next-safe-action/hooks";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import FormSuccess from "./FormSuccess";
+import FormError from "./FormError";
 
 const RegisterForm = () => {
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const { execute, status } = useAction(emailSignUp, {
-    onSuccess: (data) => console.log(data),
+    onSuccess: (data) => {
+      if (data.error) setError(data.error);
+      if (data.success) setSuccess(data.success);
+    },
   });
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
@@ -103,6 +109,8 @@ const RegisterForm = () => {
               </FormItem>
             )}
           />
+          <FormSuccess message={success} />
+          <FormError message={error} />
           <Button size={"sm"} variant={"link"} asChild>
             <Link href="/auth/reset">Forgot your password?</Link>
           </Button>
