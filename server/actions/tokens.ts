@@ -22,4 +22,13 @@ export const generateEmailVerificationToken = async (email: string) => {
   if (existingToken) {
     await db.delete(emailTokens).where(eq(emailTokens.id, existingToken.id));
   }
+  const verificationToken = await db
+    .insert(emailTokens)
+    .values({
+      email,
+      expires,
+      token,
+    })
+    .returning();
+  return verificationToken;
 };
