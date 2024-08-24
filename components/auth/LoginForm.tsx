@@ -22,8 +22,10 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import FormSuccess from "./FormSuccess";
 import FormError from "./FormError";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+  const router = useRouter()
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const { execute, status } = useAction(emailSignIn, {
