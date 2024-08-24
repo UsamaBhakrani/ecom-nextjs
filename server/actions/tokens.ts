@@ -17,7 +17,7 @@ export const getVerificationTokenByEmail = async (email: string) => {
 
 export const generateEmailVerificationToken = async (email: string) => {
   const token = crypto.randomUUID();
-  const expires = new Date(new Date().getTime() + 3600 + 1000);
+  const expires = new Date(new Date().getTime() + 3600 * 10000);
   const existingToken = await getVerificationTokenByEmail(email);
   if (existingToken) {
     await db.delete(emailTokens).where(eq(emailTokens.id, existingToken.id));
@@ -46,9 +46,9 @@ export const verifyEmailToken = async (token: string) => {
 
   await db.update(users).set({
     emailVerified: new Date(),
-    email: existingUser.email,
+    email: existingEmailToken.email,
   });
 
   await db.delete(emailTokens).where(eq(emailTokens.id, existingEmailToken.id));
-  return { error: "Email Verified Successfully" };
+  return { success: "Email Verified Successfully" };
 };
