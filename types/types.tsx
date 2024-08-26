@@ -17,3 +17,8 @@ export const registerFormSchema = z.object({
     .string()
     .min(4, { message: "Please add a name with atleast 4 characters" }),
 });
+
+export const newPasswordSchema = z.object({
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  token: z.string().nullable().optional(),
+});
