@@ -26,3 +26,4 @@ export const newPasswordSchema = z.object({
 export const resetSchema = z.object({
   email: z.string().email({ message: "Please input a valid email address" }),
 });
+

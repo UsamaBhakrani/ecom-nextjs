@@ -4,8 +4,9 @@ import SettingsCard from "./SettingsCard";
 
 const SettingsPage = async () => {
   const session = await auth();
+
   if (!session) redirect("/");
-  if (session) return <SettingsCard />; 
+  if (session) return <SettingsCard session={session} />;
 };
 
 export default SettingsPage;
