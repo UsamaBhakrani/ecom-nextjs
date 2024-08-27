@@ -1,4 +1,3 @@
-
 import { auth } from "@/server/auth";
 import Logo from "./Logo";
 import UserButton from "./UserButton";
@@ -8,11 +7,11 @@ import { LogIn } from "lucide-react";
 const Nav = async () => {
   const session = await auth();
   return (
-    <header className="py-4">
+    <header className="py-8">
       <nav>
         <ul className="flex justify-between items-center">
           <li className="">
-            <Link href="/">
+            <Link href="/" aria-label="Ecom logo">
               <Logo />
             </Link>
           </li>
