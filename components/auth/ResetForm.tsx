@@ -14,65 +14,45 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { registerFormSchema } from "@/types/types";
+import { resetSchema } from "@/types/types";
 import Link from "next/link";
-import { emailSignUp } from "@/server/actions/emailSignUp";
 import { useAction } from "next-safe-action/hooks";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import FormSuccess from "./FormSuccess";
 import FormError from "./FormError";
+import { passwordReset } from "@/server/actions/passwordReset";
 
-const RegisterForm = () => {
+const ResetForm = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const { execute, status } = useAction(emailSignUp, {
+  const { execute, status } = useAction(passwordReset, {
     onSuccess: (data) => {
       if (data.error) setError(data.error);
       if (data.success) setSuccess(data.success);
     },
   });
 
-  const form = useForm<z.infer<typeof registerFormSchema>>({
-    resolver: zodResolver(registerFormSchema),
+  const form = useForm<z.infer<typeof resetSchema>>({
+    resolver: zodResolver(resetSchema),
     defaultValues: {
       email: "",
-      password: "",
-      name: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof registerFormSchema>) => {
+  const onSubmit = (values: z.infer<typeof resetSchema>) => {
     execute(values);
   };
 
   return (
     <AuthCard
       backButtonHref="/auth/login"
-      backButtonLabel="Already have an account? Login"
-      cardTitle="Create a new account"
+      backButtonLabel="Back to login"
+      cardTitle="Reset Password"
       showSocials
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="John Doe"
-                    {...field}
-                    type="text"
-                    autoComplete="name"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="email"
@@ -81,29 +61,11 @@ const RegisterForm = () => {
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
+                    disabled={status === "executing"}
                     placeholder="usamabhakrani@gmail.com"
                     {...field}
                     type="email"
                     autoComplete="email"
-                    disabled={status === "executing"}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="********"
-                    {...field}
-                    type="password"
-                    autoComplete="current-password"
                   />
                 </FormControl>
                 <FormMessage />
@@ -122,7 +84,7 @@ const RegisterForm = () => {
               status === "executing" ? "animate-pulse" : ""
             )}
           >
-            Create Account
+            Reset Password
           </Button>
         </form>
       </Form>
@@ -130,4 +92,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default ResetForm;

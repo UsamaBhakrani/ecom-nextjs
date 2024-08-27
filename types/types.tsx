@@ -22,3 +22,7 @@ export const newPasswordSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
   token: z.string().nullable().optional(),
 });
+
+export const resetSchema = z.object({
+  email: z.string().email({ message: "Please input a valid email address" }),
+});

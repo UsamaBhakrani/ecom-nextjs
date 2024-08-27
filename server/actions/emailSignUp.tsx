@@ -8,7 +8,6 @@ import { users } from "../schema";
 import bcrypt from "bcrypt";
 import { generateEmailVerificationToken } from "./tokens";
 import { sendVerificationEmail } from "./email";
-import { Type } from "lucide-react";
 
 export const safeActionClient = createSafeActionClient();
 
