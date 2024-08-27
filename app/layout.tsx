@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/navigation/Nav";
 import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +19,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn("px-6 md:px-12 max-w-7xl mx-auto", `${inter.className}`)}>
-        <Nav />
+      <body
+        className={cn("px-6 md:px-12 max-w-7xl mx-auto", `${inter.className}`)}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Nav />
+        </ThemeProvider>
         {children}
       </body>
     </html>
