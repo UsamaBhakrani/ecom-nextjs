@@ -22,6 +22,7 @@ import { useState } from "react";
 import FormSuccess from "./FormSuccess";
 import FormError from "./FormError";
 import { newPassword } from "@/server/actions/newPassword";
+import { useSearchParams } from "next/navigation";
 
 const NewPasswordForm = () => {
   const [error, setError] = useState("");
@@ -40,8 +41,11 @@ const NewPasswordForm = () => {
     },
   });
 
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
   const onSubmit = (values: z.infer<typeof newPasswordSchema>) => {
-    execute(values);
+    execute({ password: values.password, token });
   };
 
   return (
