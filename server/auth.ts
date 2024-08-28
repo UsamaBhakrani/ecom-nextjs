@@ -7,7 +7,7 @@ import Github from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 import { loginFormSchema } from "@/types/types";
 import { eq } from "drizzle-orm";
-import { users } from "./schema";
+import { accounts, users } from "./schema";
 import bcrypt from "bcrypt";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -15,6 +15,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
+  },
+  callbacks: {
+    async jwt({ token }) {
+      if (!token.sub) return token;
+      const existingUser = await db.query.users.findFirst({
+        where: eq(users.id, token.sub),
+      });
+      if (!existingUser) return token;
+      const existingAccount = await db.query.users.findFirst({
+        where: eq(accounts.userId, existingUser.id),
+      });
+      token.isOAuth = existingAccount;
+      token.name = existingUser.name;
+      token.email = existingUser.email;
+      token.role = existingUser.role;
+      token.isTwoFactorEnabled = existingAccount?.twoFactorEnabled;
+      token.image = existingUser.image;
+      return token;
+    },
   },
   providers: [
     Google({
@@ -40,7 +59,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const passwordMatch = await bcrypt.compare(password, user.password);
           if (passwordMatch) return user;
         }
-        return null
+        return null;
       },
     }),
   ],
