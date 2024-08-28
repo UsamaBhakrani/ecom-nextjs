@@ -17,6 +17,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     maxAge: 30 * 24 * 60 * 60,
   },
   callbacks: {
+    async session({ session, token }) {
+      if (session && token.sub) {
+        session.user.id = token.sub;
+      }
+      if (session.user && token.role) {
+        session.user.role = token.role as string;
+      }
+      if (session.user) {
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+        session.user.name = token.name;
+        session.user.email = token.email as string;
+        session.user.isOAuth = token.isOAuth as boolean;
+        session.user.image = token.image as string;
+      }
+      return session;
+    },
     async jwt({ token }) {
       if (!token.sub) return token;
       const existingUser = await db.query.users.findFirst({
@@ -26,7 +42,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       const existingAccount = await db.query.users.findFirst({
         where: eq(accounts.userId, existingUser.id),
       });
-      token.isOAuth = existingAccount;
+      token.isOAuth = !!existingAccount;
       token.name = existingUser.name;
       token.email = existingUser.email;
       token.role = existingUser.role;
