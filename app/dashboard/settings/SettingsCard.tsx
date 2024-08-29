@@ -30,6 +30,7 @@ import { Switch } from "@/components/ui/switch";
 import FormError from "@/components/auth/FormError";
 import FormSuccess from "@/components/auth/FormSuccess";
 import { settings } from "@/server/actions/settings";
+import { UploadButton } from "@/app/api/uploadthing/upload";
 
 interface SettingsCardProps {
   session: Session;
@@ -117,6 +118,27 @@ const SettingsCard = (session: SettingsCardProps) => {
                         height={42}
                       />
                     )}
+                    <UploadButton
+                      className="scale-75 ut-button:bg-primary/75 hover:ut-button:bg-primary/100 ut-button:transition-all ut-button:duration-500 ut-label:hidden ut-allowed-content:hidden"
+                      endpoint="avatarUploader"
+                      content={{
+                        button({ ready }) {
+                          if (ready) {
+                            return "Upload Avatar";
+                          }
+                          return "Choose an Image";
+                        },
+                      }}
+                      onClientUploadComplete={(res) => {
+                        // Do something with the response
+                        console.log("Files: ", res);
+                        alert("Upload Completed");
+                      }}
+                      onUploadError={(error: Error) => {
+                        // Do something with the error.
+                        alert(`ERROR! ${error.message}`);
+                      }}
+                    />
                   </div>
                   <FormControl>
                     <Input
