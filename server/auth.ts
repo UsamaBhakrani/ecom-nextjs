@@ -39,14 +39,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         where: eq(users.id, token.sub),
       });
       if (!existingUser) return token;
-      const existingAccount = await db.query.users.findFirst({
-        where: eq(accounts.userId, existingUser.id),
+      const existingAccount = await db.query.accounts.findFirst({
+        where: eq(accounts?.userId, existingUser.id),
       });
       token.isOAuth = !!existingAccount;
       token.name = existingUser.name;
       token.email = existingUser.email;
       token.role = existingUser.role;
-      token.isTwoFactorEnabled = existingAccount?.twoFactorEnabled;
+      token.isTwoFactorEnabled = existingUser?.twoFactorEnabled;
       token.image = existingUser.image;
       return token;
     },

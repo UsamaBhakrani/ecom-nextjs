@@ -29,6 +29,7 @@ import Image from "next/image";
 import { Switch } from "@/components/ui/switch";
 import FormError from "@/components/auth/FormError";
 import FormSuccess from "@/components/auth/FormSuccess";
+import { settings } from "@/server/actions/settings";
 
 interface SettingsCardProps {
   session: Session;
@@ -38,12 +39,16 @@ const SettingsCard = (session: SettingsCardProps) => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [avatarUploading, setAvatarUploading] = useState(false);
-  // const { execute, status } = useAction(updateSettings, {
-  //   onSuccess: (data) => {
-  //     if (data.error) setError(data.error);
-  //     if (data.success) setSuccess(data.success);
-  //   },
-  // });
+
+  const { execute, status } = useAction(settings, {
+    onSuccess: (data) => {
+      if (data.error) setError(data.error);
+      if (data.success) setSuccess(data.success);
+    },
+    onError: (error) => {
+      setError("Something went wrong");
+    },
+  });
 
   const form = useForm<z.infer<typeof settingsSchema>>({
     resolver: zodResolver(settingsSchema),
@@ -52,13 +57,13 @@ const SettingsCard = (session: SettingsCardProps) => {
       newPassword: undefined,
       email: session.session.user?.email || undefined,
       name: session.session.user?.name || undefined,
-      // image: session.session.user?.avatar || undefined,
-      // isTwoFactorEnabled: session.session.user?.isTwoFactorEnabled || undefined,
+      image: session.session.user?.image || undefined,
+      isTwoFactorEnabled: session.session.user?.isTwoFactorEnabled || undefined,
     },
   });
 
   function onSubmit(values: z.infer<typeof settingsSchema>) {
-    console.log(values);
+    execute(values);
   }
 
   return (
@@ -151,7 +156,10 @@ const SettingsCard = (session: SettingsCardProps) => {
                   <FormControl>
                     <Input
                       placeholder="John Doe"
-                      disabled={status === "executing"}
+                      disabled={
+                        status === "executing" ||
+                        session.session.user.isOAuth === true
+                      }
                       {...field}
                     />
                   </FormControl>
@@ -169,7 +177,12 @@ const SettingsCard = (session: SettingsCardProps) => {
                     Enable two factor authentication for your account
                   </FormDescription>
                   <FormControl>
-                    <Switch disabled={status === "executing"} />
+                    <Switch
+                      disabled={
+                        status === "executing" ||
+                        session.session.user.isOAuth === true
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
