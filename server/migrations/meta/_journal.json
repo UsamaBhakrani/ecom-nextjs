@@ -64,6 +64,27 @@
       "when": 1724692353699,
       "tag": "0008_swift_moonstone",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1725035552010,
+      "tag": "0009_glossy_tusk",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1725035719868,
+      "tag": "0010_handy_salo",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1725035842409,
+      "tag": "0011_strong_stark_industries",
+      "breakpoints": true
     }
   ]
 }
