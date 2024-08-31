@@ -119,7 +119,7 @@ const SettingsCard = (session: SettingsCardProps) => {
                       />
                     )}
                     <UploadButton
-                      className="scale-75 ut-button:bg-primary/75 hover:ut-button:bg-primary/100 ut-button:transition-all ut-button:duration-500 ut-label:hidden ut-allowed-content:hidden"
+                      className="scale-75 ut-button:ring-primary ut-button:bg-primary/75 hover:ut-button:bg-primary/100 ut-button:transition-all ut-button:duration-500 ut-label:hidden ut-allowed-content:hidden"
                       endpoint="avatarUploader"
                       content={{
                         button({ ready }) {
@@ -129,14 +129,18 @@ const SettingsCard = (session: SettingsCardProps) => {
                           return "Choose an Image";
                         },
                       }}
+                      onUploadBegin={() => setAvatarUploading(true)}
                       onClientUploadComplete={(res) => {
-                        // Do something with the response
-                        console.log("Files: ", res);
-                        alert("Upload Completed");
+                        form.setValue("image", res[0].url!);
+                        setAvatarUploading(false);
                       }}
                       onUploadError={(error: Error) => {
-                        // Do something with the error.
-                        alert(`ERROR! ${error.message}`);
+                        form.setError("image", {
+                          type: "validate",
+                          message: error.message,
+                        });
+                        setAvatarUploading(false);
+                        return;
                       }}
                     />
                   </div>
