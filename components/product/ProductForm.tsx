@@ -22,13 +22,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
 import FormError from "../auth/FormError";
 import FormSuccess from "../auth/FormSuccess";
 import { DollarSign } from "lucide-react";
 import Tiptap from "./TipTap";
+import { useAction } from "next-safe-action/hooks";
+import { useState } from "react";
+import { createProduct } from "@/server/actions/createProduct";
 
 const ProductForm = () => {
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
   const form = useForm<z.infer<typeof productsSchema>>({
     resolver: zodResolver(productsSchema),
     defaultValues: {
@@ -39,9 +43,18 @@ const ProductForm = () => {
     mode: "onChange",
   });
 
+  const { execute, status } = useAction(createProduct, {
+    onSuccess: (data) => {
+      if (data?.success) setSuccess(data.success);
+      if (data?.error) setError(data.error);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
   function onSubmit(values: z.infer<typeof productsSchema>) {
-    // execute(values);
-    console.log(values);
+    execute(values);
   }
 
   return (
@@ -135,11 +148,6 @@ const ProductForm = () => {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Tiptap val={field.value} />
-                    {/* <Input
-                      placeholder="Chicken Karahi with a pinch of bell peppers"
-                      disabled={status === "executing"}
-                      {...field}
-                    /> */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -159,7 +167,6 @@ const ProductForm = () => {
                         className="p-2 bg-muted rounded-md"
                       />
                       <Input
-                        min={0}
                         step="0.1"
                         type="number"
                         placeholder="Your price in USD"
@@ -172,9 +179,16 @@ const ProductForm = () => {
                 </FormItem>
               )}
             />
-            {/* <FormError message={error} />
-            <FormSuccess message={success} /> */}
-            <Button disabled={status === "executing"} type="submit">
+            <FormError message={error} />
+            <FormSuccess message={success} />
+            <Button
+              disabled={
+                status === "executing" ||
+                !form.formState.isValid ||
+                !form.formState.isDirty
+              }
+              type="submit"
+            >
               Upload Product
             </Button>
           </form>

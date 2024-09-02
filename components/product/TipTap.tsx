@@ -43,7 +43,6 @@ const Tiptap = ({ val }: { val: string }) => {
       const content = editor.getHTML();
       setValue("description", content, {
         shouldValidate: true,
-        shouldDirty: true,
       });
     },
     content: val,
