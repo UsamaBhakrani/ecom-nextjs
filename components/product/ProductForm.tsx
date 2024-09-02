@@ -35,8 +35,8 @@ const ProductForm = () => {
       title: "",
       description: "",
       price: 0,
-      id: 0,
     },
+    mode: "onChange",
   });
 
   function onSubmit(values: z.infer<typeof productsSchema>) {
@@ -134,7 +134,7 @@ const ProductForm = () => {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Tiptap val={field.value}  />
+                    <Tiptap val={field.value} />
                     {/* <Input
                       placeholder="Chicken Karahi with a pinch of bell peppers"
                       disabled={status === "executing"}

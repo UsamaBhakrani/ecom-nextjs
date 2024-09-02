@@ -3,6 +3,7 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
+import Placeholder from "@tiptap/extension-placeholder";
 import { Toggle } from "../ui/toggle";
 import {
   Bold,
@@ -11,10 +12,11 @@ import {
   ListOrdered,
   LucideUnderline,
   Strikethrough,
-  UnderlineIcon,
 } from "lucide-react";
+import { useFormContext } from "react-hook-form";
 
 const Tiptap = ({ val }: { val: string }) => {
+  const { setValue } = useFormContext();
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -30,7 +32,20 @@ const Tiptap = ({ val }: { val: string }) => {
         },
       }),
       Underline,
+      Placeholder.configure({
+        placeholder: "Add a longer description for your products",
+        emptyNodeClass:
+          "first:before:text-gray-600 first:before:float-left first:before:content-[attr(data-placeholder)] first:before:pointer-events-none",
+      }),
     ],
+    immediatelyRender: false,
+    onUpdate: ({ editor }) => {
+      const content = editor.getHTML();
+      setValue("description", content, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
     content: val,
     editorProps: {
       attributes: {
