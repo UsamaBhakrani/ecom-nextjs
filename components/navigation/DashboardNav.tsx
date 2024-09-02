@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -14,27 +14,34 @@ const DashboardNav = ({ allLinks }: DashboardNavProps) => {
 
   return (
     <nav className="py-2 overflow">
-      <ul className="flex gap-6 text-sm font-bold">
-        {allLinks.map(({ icon, label, path }) => {
-          return (
-            <motion.li whileTap={{ scale: 0.95 }} key={label}>
-              <Link
-                href={path}
-                className={cn(
-                  "flex gap-1 flex-col items-center",
-                  pathName === path && "text-purple-500"
-                  //   ?
-                  //   (
-                  // <motion.div className="h-[3px] w-full rounded-full absolute bg-primary z-0 left-0 -bottom-1" />
-                  //   ) : null
-                )}
-              >
-                {icon}
-                {label}
-              </Link>
-            </motion.li>
-          );
-        })}
+      <ul className="flex gap-6 text-sm font-semibold">
+        <AnimatePresence>
+          {allLinks.map(({ icon, label, path }) => {
+            return (
+              <motion.li whileTap={{ scale: 0.95 }} key={label}>
+                <Link
+                  href={path}
+                  className={cn(
+                    "flex gap-1 flex-col items-center relative",
+                    pathName === path && "text-purple-500"
+                  )}
+                >
+                  {icon}
+                  {label}
+                  {pathName === path ? (
+                    <motion.div
+                      initial={{ scale: 0.5 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 35 }}
+                      layoutId="underline"
+                      className="h-[2px] w-full rounded-full absolute bg-purple-500 z-0 left-0 -bottom-1"
+                    />
+                  ) : null}
+                </Link>
+              </motion.li>
+            );
+          })}
+        </AnimatePresence>
       </ul>
     </nav>
   );
