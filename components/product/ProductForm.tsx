@@ -26,6 +26,7 @@ import Image from "next/image";
 import FormError from "../auth/FormError";
 import FormSuccess from "../auth/FormSuccess";
 import { DollarSign } from "lucide-react";
+import Tiptap from "./TipTap";
 
 const ProductForm = () => {
   const form = useForm<z.infer<typeof productsSchema>>({
@@ -133,11 +134,12 @@ const ProductForm = () => {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input
+                    <Tiptap val={field.value}  />
+                    {/* <Input
                       placeholder="Chicken Karahi with a pinch of bell peppers"
                       disabled={status === "executing"}
                       {...field}
-                    />
+                    /> */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
