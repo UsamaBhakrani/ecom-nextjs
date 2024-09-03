@@ -29,8 +29,8 @@ export const columns: ColumnDef<ProductColumn>[] = [
     header: "Price",
     cell: ({ row }) => {
       const price = parseFloat(row.getValue("price"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        currency: "USD",
+      const formatted = new Intl.NumberFormat("en-PK", {
+        currency: "PKR",
         style: "currency",
       }).format(price);
       return <div className="font-md text-xs">{formatted}</div>;
@@ -47,7 +47,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
           <Image
             src={cellImage}
             alt={cellTitle}
-            className="w-12 h-12"
+            className="w-12 h-12 rounded-md"
             width={100}
             height={100}
           />
