@@ -4,6 +4,7 @@ import "./globals.css";
 import Nav from "@/components/navigation/Nav";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,8 +30,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Nav />
+          <Toaster richColors />
+          {children}
         </ThemeProvider>
-        {children}
       </body>
     </html>
   );

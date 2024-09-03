@@ -22,17 +22,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import FormError from "../auth/FormError";
-import FormSuccess from "../auth/FormSuccess";
 import { DollarSign } from "lucide-react";
 import Tiptap from "./TipTap";
 import { useAction } from "next-safe-action/hooks";
-import { useState } from "react";
 import { createProduct } from "@/server/actions/createProduct";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const ProductForm = () => {
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
+  const router = useRouter();
   const form = useForm<z.infer<typeof productsSchema>>({
     resolver: zodResolver(productsSchema),
     defaultValues: {
@@ -45,11 +43,21 @@ const ProductForm = () => {
 
   const { execute, status } = useAction(createProduct, {
     onSuccess: (data) => {
-      if (data?.success) setSuccess(data.success);
-      if (data?.error) setError(data.error);
+      if (data?.success) {
+        toast.success("Product created successfully!");
+        setTimeout(() => {
+          router.push("/dashboard/products");
+        }, 2000);
+      }
+      if (data?.error) {
+        toast.error("Error creating product");
+      }
     },
     onError: (error) => {
       console.error(error);
+    },
+    onExecute: () => {
+      toast.loading("Creating new product");
     },
   });
 
@@ -179,8 +187,6 @@ const ProductForm = () => {
                 </FormItem>
               )}
             />
-            <FormError message={error} />
-            <FormSuccess message={success} />
             <Button
               disabled={
                 status === "executing" ||
