@@ -31,9 +31,6 @@ export const ActionCell = ({ row }: { row: Row<ProductColumn> }) => {
       if (data?.success) toast.success(data.success);
       if (data?.error) toast.error(data.error);
     },
-    // onExecute: () => {
-    //   toast.loading("Deleting Product");
-    // },
   });
 
   return (
@@ -45,13 +42,18 @@ export const ActionCell = ({ row }: { row: Row<ProductColumn> }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem className="dark:focus:bg-primary focus:bg-primary/50 cursor-pointer">
-          <Link href={`/dashboard/add-product?id=${product.id}`}>Edit</Link>
+          <Link
+            className="scale-100"
+            href={`/dashboard/add-product?id=${product.id}`}
+          >
+            Edit Product
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => execute(product)}
           className="dark:focus:bg-destructive focus:bg-destructive/50 cursor-pointer"
         >
-          Delete
+          Delete Product
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

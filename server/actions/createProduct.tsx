@@ -5,6 +5,7 @@ import { createSafeActionClient } from "next-safe-action";
 import { db } from "..";
 import { eq } from "drizzle-orm";
 import { products } from "../schema";
+import { revalidatePath } from "next/cache";
 
 export const safeActionClient = createSafeActionClient();
 
@@ -27,7 +28,7 @@ export const createProduct = safeActionClient(
           .set({ description, price, title })
           .where(eq(products.id, id))
           .returning();
-
+        revalidatePath("/dashboard/products");
         return {
           success: `Product ${editedProduct[0].title} updated successfully`,
         };
@@ -43,6 +44,7 @@ export const createProduct = safeActionClient(
             title,
           })
           .returning();
+        revalidatePath("/dashboard/products");
         return { success: `Product ${newProduct[0].title} added successfully` };
       }
     } catch (error) {

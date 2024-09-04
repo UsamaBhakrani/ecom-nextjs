@@ -56,7 +56,7 @@ const ProductForm = () => {
   };
 
   useEffect(() => {
-    if(editMode){
+    if (editMode) {
       checkIfProductAlreadyExists(parseInt(editMode));
     }
   }, []);
@@ -88,9 +88,9 @@ const ProductForm = () => {
     onError: (error) => {
       console.error(error);
     },
-    onExecute: () => {
-      toast.loading("Creating new product");
-    },
+    // onExecute: () => {
+    //   toast.loading("Creating new product");
+    // },
   });
 
   function onSubmit(values: z.infer<typeof productsSchema>) {
@@ -100,8 +100,12 @@ const ProductForm = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">Add Product</CardTitle>
-        <CardDescription>Add a New Product</CardDescription>
+        <CardTitle className="text-2xl">
+          {editMode ? "Edit Product" : "Create Product"}
+        </CardTitle>
+        <CardDescription>
+          {editMode ? "Make changes to existing product" : "Add a new product"}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -227,7 +231,7 @@ const ProductForm = () => {
               }
               type="submit"
             >
-              Upload Product
+              {editMode ? "Save Changes" : "Create Product"}
             </Button>
           </form>
         </Form>
