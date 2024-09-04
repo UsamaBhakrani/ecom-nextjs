@@ -13,7 +13,7 @@ const DashboardNav = ({ allLinks }: DashboardNavProps) => {
   const pathName = usePathname();
 
   return (
-    <nav className="py-2 overflow">
+    <nav className="py-2 overflow mb-4">
       <ul className="flex gap-6 text-sm font-semibold">
         <AnimatePresence>
           {allLinks.map(({ icon, label, path }) => {
