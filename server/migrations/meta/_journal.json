@@ -92,6 +92,13 @@
       "when": 1725266885514,
       "tag": "0012_smart_harpoon",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1725468507298,
+      "tag": "0013_glossy_wild_pack",
+      "breakpoints": true
     }
   ]
 }

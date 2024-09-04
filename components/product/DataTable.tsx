@@ -74,7 +74,7 @@ export function DataTable<TData, TValue>({
               }
             />
           </div>
-          <Table>
+          <Table className="mt-4">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>

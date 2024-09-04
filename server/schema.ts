@@ -11,6 +11,7 @@ import {
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "next-auth/adapters";
 import { createId } from "@paralleldrive/cuid2";
+import { relations } from "drizzle-orm";
 
 export const RoleEnum = pgEnum("roles", ["user", "admin"]);
 
@@ -113,3 +114,75 @@ export const products = pgTable("products", {
   created_at: timestamp("created_at", { mode: "date" }).defaultNow(),
   updated_at: timestamp("updated_at", { mode: "date" }).defaultNow(),
 });
+
+export const productVariants = pgTable("productVariants", {
+  id: serial("id").primaryKey(),
+  color: text("color").notNull(),
+  size: text("size").notNull(),
+  price: real("price").notNull(),
+  productType: text("price").notNull(),
+  created_at: timestamp("created_at", { mode: "date" }).defaultNow(),
+  updated_at: timestamp("updated_at", { mode: "date" }).defaultNow(),
+  productID: serial("productID")
+    .notNull()
+    .references(() => products.id, { onDelete: "cascade" }),
+});
+
+export const variantImages = pgTable("variantImages", {
+  id: serial("id").primaryKey(),
+  url: text("url").notNull(),
+  size: real("size").notNull(),
+  name: text("name").notNull(),
+  order: real("order").notNull(),
+  variantID: serial("variantID")
+    .notNull()
+    .references(() => productVariants.id, {
+      onDelete: "cascade",
+    }),
+});
+
+export const variantTags = pgTable("variantTags", {
+  id: serial("id").primaryKey(),
+  tag: text("tag").notNull(),
+  variantID: serial("variantID")
+    .notNull()
+    .references(() => productVariants.id, {
+      onDelete: "cascade",
+    }),
+});
+
+export const productRelations = relations(products, ({ many }) => ({
+  productVariants: many(productVariants, { relationName: "productVariants" }),
+}));
+
+export const productVariantsRelations = relations(
+  productVariants,
+  ({ many, one }) => ({
+    product: one(products, {
+      fields: [productVariants.productID],
+      references: [products.id],
+      relationName: "productVariants",
+    }),
+    variantImages: many(variantImages, { relationName: "variantImages" }),
+    variantTags: many(variantTags, { relationName: "variantTags" }),
+  })
+);
+
+export const variantImagesRelations = relations(
+  variantImages,
+  ({ many, one }) => ({
+    productVariants: one(productVariants, {
+      relationName: "variantImages",
+      fields: [variantImages.variantID],
+      references: [productVariants.id],
+    }),
+  })
+);
+
+export const variantTagsRelations = relations(variantTags, ({ many, one }) => ({
+  productVariants: one(productVariants, {
+    relationName: "variantTags",
+    fields: [variantTags.variantID],
+    references: [productVariants.id],
+  }),
+}));
