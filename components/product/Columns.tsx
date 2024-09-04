@@ -8,19 +8,27 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Button } from "../ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, PlusCircle } from "lucide-react";
 import { deleteProduct } from "@/server/actions/deleteProduct";
 import { toast } from "sonner";
 import { useAction } from "next-safe-action/hooks";
 import Link from "next/link";
+import { VariantsWithImagesTags } from "@/lib/inferTypes";
+import ProductVariant from "./ProductVariant";
 
 interface ProductColumn {
   title: string;
   image: string;
   price: number;
   id: number;
-  variants: any;
+  variants: VariantsWithImagesTags[];
 }
 
 export const ActionCell = ({ row }: { row: Row<ProductColumn> }) => {
@@ -73,7 +81,50 @@ export const columns: ColumnDef<ProductColumn>[] = [
     accessorKey: "variants",
     header: "Variants",
     cell: ({ row }) => {
-      const variants = row.getValue("variants");
+      const variants = row.getValue("variants") as VariantsWithImagesTags[];
+
+      return (
+        <div>
+          {variants.map((variant) => {
+            return (
+              <div key={variant.id}>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <ProductVariant
+                        editMode
+                        productID={variant.id}
+                        variant={variant}
+                      >
+                        <div
+                          key={variant.id}
+                          className="h-5 w-5 rounded-full"
+                          style={{ background: variant.color }}
+                        />
+                      </ProductVariant>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{variant.productType}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            );
+          })}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="text-purple-500 cursor-pointer">
+                  <PlusCircle className="w-4 h-4" />
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Create a new variant</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      );
     },
   },
   {
