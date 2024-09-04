@@ -1,6 +1,6 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import Image from "next/image";
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import { Button } from "../ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { deleteProduct } from "@/server/actions/deleteProduct";
 import { toast } from "sonner";
+import { useAction } from "next-safe-action/hooks";
 
 interface ProductColumn {
   title: string;
@@ -21,11 +22,36 @@ interface ProductColumn {
   variants: any;
 }
 
-const deleteProductWrapper = async (id: number) => {
-  const { data } = await deleteProduct({ id });
-  if (!data) return new Error("Product not found");
-  if (data?.success) toast.success(data.success);
-  if (data?.error) toast.error(data.error);
+export const ActionCell = ({ row }: { row: Row<ProductColumn> }) => {
+  const product = row.original;
+
+  const { execute, status } = useAction(deleteProduct, {
+    onSuccess: (data) => {
+      if (data?.success) toast.success(data.success);
+      if (data?.error) toast.error(data.error);
+    },
+  });
+
+  return (
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>
+        <Button className="h-8 w-8 p-0" variant="ghost">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem className="dark:focus:bg-primary focus:bg-primary/50 cursor-pointer">
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => execute(product)}
+          className="dark:focus:bg-destructive focus:bg-destructive/50 cursor-pointer"
+        >
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 };
 
 export const columns: ColumnDef<ProductColumn>[] = [
@@ -75,28 +101,6 @@ export const columns: ColumnDef<ProductColumn>[] = [
   {
     id: "actions",
     header: "Actions",
-    cell: ({ row }) => {
-      const product = row.original;
-      return (
-        <DropdownMenu modal={false}>
-          <DropdownMenuTrigger asChild>
-            <Button className="h-8 w-8 p-0" variant="ghost">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem className="dark:focus:bg-primary focus:bg-primary/50 cursor-pointer">
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => deleteProductWrapper(product.id)}
-              className="dark:focus:bg-destructive focus:bg-destructive/50 cursor-pointer"
-            >
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ActionCell,
   },
 ];
