@@ -26,11 +26,42 @@ import { DollarSign } from "lucide-react";
 import Tiptap from "./TipTap";
 import { useAction } from "next-safe-action/hooks";
 import { createProduct } from "@/server/actions/createProduct";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { getProduct } from "@/server/actions/getProduct";
+import { useEffect } from "react";
 
 const ProductForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const editMode = searchParams.get("id");
+
+  // Check if product already exists in Db
+  const checkIfProductAlreadyExists = async (id: number) => {
+    if (editMode) {
+      const data = await getProduct(id);
+      if (data.error) {
+        toast.error(data.error);
+        router.push("/dashboard/products");
+        return;
+      }
+      if (data.success) {
+        const id = parseInt(editMode);
+        form.setValue("title", data.success.title);
+        form.setValue("description", data.success.description);
+        form.setValue("price", data.success.price);
+        form.setValue("id", id);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if(editMode){
+      checkIfProductAlreadyExists(parseInt(editMode));
+    }
+  }, []);
+
+  // Form initialized
   const form = useForm<z.infer<typeof productsSchema>>({
     resolver: zodResolver(productsSchema),
     defaultValues: {
@@ -41,6 +72,7 @@ const ProductForm = () => {
     mode: "onChange",
   });
 
+  // Safe Action to create product on the server
   const { execute, status } = useAction(createProduct, {
     onSuccess: (data) => {
       if (data?.success) {
