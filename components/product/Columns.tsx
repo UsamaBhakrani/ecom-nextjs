@@ -6,12 +6,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { MoreHorizontal } from "lucide-react";
+import { deleteProduct } from "@/server/actions/deleteProduct";
+import { toast } from "sonner";
 
 interface ProductColumn {
   title: string;
@@ -20,6 +20,13 @@ interface ProductColumn {
   id: number;
   variants: any;
 }
+
+const deleteProductWrapper = async (id: number) => {
+  const { data } = await deleteProduct({ id });
+  if (!data) return new Error("Product not found");
+  if (data?.success) toast.success(data.success);
+  if (data?.error) toast.error(data.error);
+};
 
 export const columns: ColumnDef<ProductColumn>[] = [
   {
@@ -81,7 +88,10 @@ export const columns: ColumnDef<ProductColumn>[] = [
             <DropdownMenuItem className="dark:focus:bg-primary focus:bg-primary/50 cursor-pointer">
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem className="dark:focus:bg-destructive focus:bg-destructive/50 cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => deleteProductWrapper(product.id)}
+              className="dark:focus:bg-destructive focus:bg-destructive/50 cursor-pointer"
+            >
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
