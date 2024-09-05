@@ -26,6 +26,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { variantSchema } from "@/types/dashboardTypes";
 import { useAction } from "next-safe-action/hooks";
+import InputTags from "./InputTags";
+import VariantImages from "./VariantImages";
 
 interface ProductVariantProps {
   editMode: boolean;
@@ -72,24 +74,62 @@ const ProductVariant = ({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="productType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Variant Title</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Pick a title for your variant"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="color"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Variant Color</FormLabel>
                   <FormControl>
-                    <Input placeholder="purple" {...field} />
+                    <Input type="color" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <FormField
+              control={form.control}
+              name="tags"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Variant Tags</FormLabel>
+                  <FormControl>
+                    {/* <InputTags
+                      onChange={(e) => field.onChange(e)}
+                      placeholder="Pick a tag for your variant"
+                      {...field}
+                    /> */}
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <VariantImages />
+            {editMode && variant && (
+              <Button type="button" onClick={(e) => e.preventDefault()}>
+                Delete variant
+              </Button>
+            )}
+            <Button type="submit">
+              {editMode ? "Update Variant" : "Create Variant"}
+            </Button>
           </form>
         </Form>
       </DialogContent>
