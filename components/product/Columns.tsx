@@ -91,17 +91,19 @@ export const columns: ColumnDef<ProductColumn>[] = [
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <ProductVariant
-                        editMode
-                        productID={variant.id}
-                        variant={variant}
-                      >
-                        <div
-                          key={variant.id}
-                          className="h-5 w-5 rounded-full"
-                          style={{ background: variant.color }}
-                        />
-                      </ProductVariant>
+                      <span>
+                        <ProductVariant
+                          editMode
+                          productID={variant.productID}
+                          variant={variant}
+                        >
+                          <div
+                            key={variant.id}
+                            className="h-5 w-5 rounded-full"
+                            style={{ background: variant.color }}
+                          />
+                        </ProductVariant>
+                      </span>
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>{variant.productType}</p>
@@ -114,9 +116,11 @@ export const columns: ColumnDef<ProductColumn>[] = [
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <span className="text-purple-500 cursor-pointer">
-                  <PlusCircle className="w-4 h-4" />
-                </span>
+                <ProductVariant editMode={false}>
+                  <span className="text-purple-500 cursor-pointer">
+                    <PlusCircle className="w-4 h-4" />
+                  </span>
+                </ProductVariant>
               </TooltipTrigger>
               <TooltipContent>
                 <p>Create a new variant</p>

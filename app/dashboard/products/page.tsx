@@ -2,9 +2,11 @@ import { db } from "@/server";
 import placeHolder from "@/public/placeholder_small.jpg";
 import { DataTable } from "@/components/product/DataTable";
 import { columns } from "@/components/product/Columns";
+import { variantImages } from "@/server/schema";
 
 const ProductsPage = async () => {
   const allProducts = await db.query.products.findMany({
+    with: { productVariants: { with: { variantImages: true } } },
     orderBy: (products, { desc }) => [desc(products.id)],
   });
 

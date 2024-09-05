@@ -13,8 +13,8 @@ import {
 
 interface ProductVariantProps {
   editMode: boolean;
-  productID: number;
-  variant: VariantsWithImagesTags;
+  productID?: number;
+  variant?: VariantsWithImagesTags;
   children: ReactNode;
 }
 
@@ -26,7 +26,7 @@ const ProductVariant = ({
 }: ProductVariantProps) => {
   return (
     <Dialog>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you absolutely sure?</DialogTitle>
