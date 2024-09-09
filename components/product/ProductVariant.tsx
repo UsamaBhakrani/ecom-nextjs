@@ -112,6 +112,7 @@ const ProductVariant = ({
                   <FormLabel>Variant Tags</FormLabel>
                   <FormControl>
                     <InputTags
+                      {...field}
                       onChange={(e) => field.onChange(e)}
                       value={field.value}
                     />
