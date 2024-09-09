@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,7 +24,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { variantSchema } from "@/types/dashboardTypes";
-import { useAction } from "next-safe-action/hooks";
 import InputTags from "./InputTags";
 import VariantImages from "./VariantImages";
 
@@ -116,11 +114,6 @@ const ProductVariant = ({
                       onChange={(e) => field.onChange(e)}
                       value={field.value}
                     />
-                    {/* <InputTags
-                      onChange={(e) => field.onChange(e)}
-                      placeholder="Pick a tag for your variant"
-                      {...field}
-                    /> */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
