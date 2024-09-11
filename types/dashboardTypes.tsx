@@ -28,7 +28,6 @@ export const productsSchema = z.object({
   price: z.coerce
     .number()
     .positive({ message: "Price must be a positive number" }),
-  // image: z.string(),
 });
 
 export const variantSchema = z.object({

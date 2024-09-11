@@ -46,7 +46,7 @@ export const ProductVariant = ({
     defaultValues: {
       tags: [],
       variantImages: [],
-      color: "#00000",
+      color: "#000000",
       editMode,
       id: undefined,
       productID,

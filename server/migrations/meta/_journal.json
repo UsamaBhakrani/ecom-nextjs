@@ -99,6 +99,13 @@
       "when": 1725468507298,
       "tag": "0013_glossy_wild_pack",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1726069635590,
+      "tag": "0014_sloppy_skrulls",
+      "breakpoints": true
     }
   ]
 }
