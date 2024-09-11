@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import { useAction } from "next-safe-action/hooks";
 import Link from "next/link";
 import { VariantsWithImagesTags } from "@/lib/inferTypes";
-import ProductVariant from "./ProductVariant";
+import { ProductVariant } from "./ProductVariant";
 
 interface ProductColumn {
   title: string;

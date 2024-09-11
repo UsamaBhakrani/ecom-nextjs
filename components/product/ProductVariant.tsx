@@ -24,7 +24,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { variantSchema } from "@/types/dashboardTypes";
-import InputTags from "./InputTags";
+import { InputTags } from "./InputTags";
 import VariantImages from "./VariantImages";
 
 interface ProductVariantProps {
@@ -34,7 +34,7 @@ interface ProductVariantProps {
   children: ReactNode;
 }
 
-const ProductVariant = ({
+export const ProductVariant = ({
   editMode,
   productID,
   variant,
@@ -64,7 +64,7 @@ const ProductVariant = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="lg:max-w-screen-lg overflow-y-scroll max-h-[860px] rounded-md">
         <DialogHeader>
           <DialogTitle>{editMode ? "Edit" : "Create"} your variant</DialogTitle>
           <DialogDescription>
@@ -134,5 +134,3 @@ const ProductVariant = ({
     </Dialog>
   );
 };
-
-export default ProductVariant;

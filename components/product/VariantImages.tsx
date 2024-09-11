@@ -123,13 +123,15 @@ const VariantImages = () => {
                 <Reorder.Item
                   as="tr"
                   value={field}
+                  id={field.id}
+                  key={field.id}
+                  onDragStart={() => setActive(index)}
                   className={cn(
                     field.url.search("blob:") === 0
                       ? "animate-pulse transition-all"
                       : "",
                     "text-sm font-bold text-muted-foreground hover:text-primary"
                   )}
-                  key={field.id}
                 >
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{field.name}</TableCell>
