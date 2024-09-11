@@ -67,9 +67,16 @@ export const createVariant = safeActionClient(
             color,
             productType,
             productID,
-          
           })
           .returning();
+
+        // Insert new variant tags
+        await db.insert(variantTags).values(
+          tags.map((tag: any) => ({
+            tag,
+            variantID: newVariant[0].id,
+          }))
+        );
       }
     } catch (error) {}
   }
