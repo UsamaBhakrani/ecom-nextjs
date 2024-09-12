@@ -65,7 +65,6 @@ export const ProductVariant = ({
   });
 
   function onSubmit(values: z.infer<typeof variantSchema>) {
-    console.log(values);
     execute(values);
   }
 

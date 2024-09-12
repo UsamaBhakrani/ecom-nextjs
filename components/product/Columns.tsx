@@ -100,7 +100,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
                           <div
                             key={variant.id}
                             className="h-5 w-5 rounded-full"
-                            style={{ background: variant.color }}
+                            style={{ backgroundColor: variant.color }}
                           />
                         </ProductVariant>
                       </span>
