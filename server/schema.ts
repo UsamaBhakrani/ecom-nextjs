@@ -98,6 +98,7 @@ export const twoFactorTokens = pgTable(
     token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
     email: text("email").notNull(),
+    userID: text("userID").references(() => users.id, { onDelete: "cascade" }),
   },
   (email_tokens) => ({
     compositePk: primaryKey({
@@ -118,8 +119,6 @@ export const products = pgTable("products", {
 export const productVariants = pgTable("productVariants", {
   id: serial("id").primaryKey(),
   color: text("color").notNull(),
-  size: text("size"),
-  price: real("price"),
   productType: text("price").notNull(),
   created_at: timestamp("created_at", { mode: "date" }).defaultNow(),
   updated_at: timestamp("updated_at", { mode: "date" }).defaultNow(),

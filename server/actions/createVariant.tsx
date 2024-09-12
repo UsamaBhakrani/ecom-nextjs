@@ -1,65 +1,62 @@
 "use server";
 
-import { variantSchema } from "@/types/dashboardTypes";
 import { createSafeActionClient } from "next-safe-action";
 import { db } from "..";
-import { productVariants, variantImages } from "../schema";
+import {
+  productVariants,
+  products,
+  variantImages,
+  variantTags,
+} from "../schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { variantSchema } from "@/types/dashboardTypes";
 
-export const safeActionClient = createSafeActionClient();
+const safeActionClient = createSafeActionClient();
 
 export const createVariant = safeActionClient(
   variantSchema,
   async ({
+    color,
     editMode,
     id,
-    color,
-    productType,
-    variantTags,
-    tags,
-    variantImages: newImages,
     productID,
+    productType,
+    tags,
+    variantImages: newImgs,
   }) => {
     try {
-      // Update Variant Color and Product Type
       if (editMode && id) {
         const editVariant = await db
           .update(productVariants)
           .set({ color, productType, updated_at: new Date() })
+          .where(eq(productVariants.id, id))
           .returning();
-
-        // Delete existing variant tags and insert new ones
         await db
           .delete(variantTags)
           .where(eq(variantTags.variantID, editVariant[0].id));
         await db.insert(variantTags).values(
-          tags.map((tag: { tag: string; variantID: number }) => ({
+          tags.map((tag: any) => ({
             tag,
             variantID: editVariant[0].id,
           }))
         );
-
-        // Delete existing variant Images and insert new ones
         await db
           .delete(variantImages)
           .where(eq(variantImages.variantID, editVariant[0].id));
         await db.insert(variantImages).values(
-          newImages.map((img: any, index: number) => ({
+          newImgs.map((img: any, idx: any) => ({
             name: img.name,
             size: img.size,
             url: img.url,
             variantID: editVariant[0].id,
-            order: index,
+            order: idx,
           }))
         );
         revalidatePath("/dashboard/products");
-        return {
-          success: `${productType} updated successfully`,
-        };
+        return { success: `Edited ${productType}` };
       }
 
-      // Insert new Variant Color and Product Type
       if (!editMode) {
         const newVariant = await db
           .insert(productVariants)
@@ -69,15 +66,29 @@ export const createVariant = safeActionClient(
             productID,
           })
           .returning();
-
-        // Insert new variant tags
+        await db.query.products.findFirst({
+          where: eq(products.id, productID),
+        });
         await db.insert(variantTags).values(
           tags.map((tag: any) => ({
             tag,
             variantID: newVariant[0].id,
           }))
         );
+        await db.insert(variantImages).values(
+          newImgs.map((img: any, idx: any) => ({
+            name: img.name,
+            size: img.size,
+            url: img.url,
+            variantID: newVariant[0].id,
+            order: idx,
+          }))
+        );
+        revalidatePath("/dashboard/products");
+        return { success: `Added ${productType}` };
       }
-    } catch (error) {}
+    } catch (error) {
+      return { error: "Failed to create variant" };
+    }
   }
 );

@@ -93,7 +93,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
                     <TooltipTrigger asChild>
                       <span>
                         <ProductVariant
-                          editMode
+                          editMode={true}
                           productID={variant.productID}
                           variant={variant}
                         >
@@ -116,7 +116,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <ProductVariant editMode={false}>
+                <ProductVariant productID={row.original.id} editMode={false}>
                   <span className="text-purple-500 cursor-pointer">
                     <PlusCircle className="w-4 h-4" />
                   </span>

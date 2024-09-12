@@ -26,6 +26,9 @@ import { z } from "zod";
 import { variantSchema } from "@/types/dashboardTypes";
 import { InputTags } from "./InputTags";
 import VariantImages from "./VariantImages";
+import { useAction } from "next-safe-action/hooks";
+import { createVariant } from "@/server/actions/createVariant";
+import { toast } from "sonner";
 
 interface ProductVariantProps {
   editMode: boolean;
@@ -54,13 +57,18 @@ export const ProductVariant = ({
     },
   });
 
-  // const { execute, status } = useAction(createVariant, {
-  //   onSuccess: (data) => {},
-  // });
+  const { execute, status } = useAction(createVariant, {
+    onSuccess: (data) => {
+      if (data?.success) toast.success(data.success);
+      if (data?.error) toast.error(data.error);
+    },
+  });
 
   function onSubmit(values: z.infer<typeof variantSchema>) {
-    // execute(values);
+    console.log(values);
+    execute(values);
   }
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -109,11 +117,7 @@ export const ProductVariant = ({
                 <FormItem>
                   <FormLabel>Variant Tags</FormLabel>
                   <FormControl>
-                    <InputTags
-                      {...field}
-                      onChange={(e) => field.onChange(e)}
-                      value={field.value}
-                    />
+                    <InputTags {...field} onChange={(e) => field.onChange(e)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
