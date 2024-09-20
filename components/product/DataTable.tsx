@@ -3,17 +3,18 @@
 import {
   ColumnDef,
   ColumnFiltersState,
+  SortingState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -26,9 +27,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { ChevronLeftIcon, ChevronRight, ChevronRightIcon } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -46,8 +47,8 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnFiltersChange: setColumnFilters,
     state: {
       sorting,
       columnFilters,
@@ -55,92 +56,96 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-2xl">All Products </CardTitle>
-        <CardDescription>Create, Edit and Delete your products</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="">
-          <div className="">
-            <Input
-              placeholder="Filter products"
-              onChange={(e) =>
-                table.getColumn("title")?.setFilterValue(e.target.value)
-              }
-              value={
-                (table.getColumn("title")?.getFilterValue() as string) ?? ""
-              }
-            />
-          </div>
-          <Table className="mt-4">
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
+    <div className="rounded-md border">
+      <Card>
+        <CardHeader>
+          <CardTitle>Your Products</CardTitle>
+          <CardDescription>
+            Update, delete and edit your products 💯
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div>
+            <div>
+              <Input
+                placeholder="Filter Products"
+                value={
+                  (table.getColumn("title")?.getFilterValue() as string) ?? ""
+                }
+                onChange={(event) =>
+                  table.getColumn("title")?.setFilterValue(event.target.value)
+                }
+              />
+            </div>
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      );
+                    })}
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-          <div className="flex justify-end items-center gap-4 pt-4">
-            <Button
-              variant="outline"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronLeft className="w-4 h-4" />
-              <span>Previous page</span>
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <span>Next page</span>
-              <ChevronRight className="w-4 h-4" />
-            </Button>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+            <div className="flex items-center justify-end gap-4 pt-4">
+              <Button
+                disabled={!table.getCanPreviousPage()}
+                onClick={() => table.previousPage()}
+                variant="outline"
+              >
+                <ChevronLeftIcon className="w-4 h-4" />
+                <span>Previous Page</span>
+              </Button>
+              <Button
+                disabled={!table.getCanNextPage()}
+                onClick={() => table.nextPage()}
+                variant="outline"
+              >
+                <span>Next page</span>
+                <ChevronRightIcon className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

@@ -88,9 +88,6 @@ const ProductForm = () => {
     onError: (error) => {
       console.error(error);
     },
-    // onExecute: () => {
-    //   toast.loading("Creating new product");
-    // },
   });
 
   function onSubmit(values: z.infer<typeof productsSchema>) {
@@ -128,62 +125,6 @@ const ProductForm = () => {
                 </FormItem>
               )}
             />
-            {/* <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Avatar</FormLabel>
-                  <div className="flex items-center gap-4">
-                    {!form.getValues("description") ? (
-                      <div className="font-bold">Description </div>
-                    ) : (
-                      <Image
-                        className="rounded-full"
-                        // src={form.getValues("description")!}
-                        alt="User Image"
-                        width={42}
-                        height={42}
-                      />
-                    )}
-                    <UploadButton
-                      className="scale-75 ut-button:ring-primary ut-button:bg-primary/75 hover:ut-button:bg-primary/100 ut-button:transition-all ut-button:duration-500 ut-label:hidden ut-allowed-content:hidden"
-                      endpoint="avatarUploader"
-                      content={{
-                        button({ ready }) {
-                          if (ready) {
-                            return "Upload Avatar";
-                          }
-                          return "Choose an Image";
-                        },
-                      }}
-                      onUploadBegin={() => setAvatarUploading(true)}
-                      onClientUploadComplete={(res) => {
-                        form.setValue("image", res[0].url!);
-                        setAvatarUploading(false);
-                      }}
-                      onUploadError={(error: Error) => {
-                        form.setError("image", {
-                          type: "validate",
-                          message: error.message,
-                        });
-                        setAvatarUploading(false);
-                        return;
-                      }}
-                    />
-                  </div>
-                  <FormControl>
-                    <Input
-                      type="hidden"
-                      placeholder="User Image"
-                      disabled={status === "executing"}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
             <FormField
               control={form.control}
               name="description"
