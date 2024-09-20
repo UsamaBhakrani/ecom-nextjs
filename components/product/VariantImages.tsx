@@ -2,31 +2,30 @@
 
 import { variantSchema } from "@/types/dashboardTypes";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { z } from "zod";
+import * as z from "zod";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "@/components/ui/form";
+import { UploadDropzone } from "@/app/api/uploadthing/upload";
 import {
   Table,
-  TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { UploadDropzone } from "@/app/api/uploadthing/upload";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import { Reorder } from "framer-motion";
 import { useState } from "react";
 
-const VariantImages = () => {
+export default function VariantImages() {
   const { getValues, control, setError } =
     useFormContext<z.infer<typeof variantSchema>>();
 
@@ -36,19 +35,27 @@ const VariantImages = () => {
   });
 
   const [active, setActive] = useState(0);
+  console.log(getValues());
 
   return (
     <div>
       <FormField
         control={control}
-        name="variantImages"
+        name={"variantImages"}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Variant Images</FormLabel>
+            <FormLabel>Tags</FormLabel>
             <FormControl>
               <UploadDropzone
-                className="ut-allowed-content:text-secondary-foreground ut-label:text-primary ut-upload-icon:text-primary/50 hover:bg-primary/50 transition-all duration-500 ease-in-out border-secondary ut-button:bg-primary/75 ut-button:ut-readying:bg-secondary"
-                endpoint="variantUploader"
+                className=" ut-allowed-content:text-secondary-foreground ut-label:text-primary ut-upload-icon:text-primary/50 hover:bg-primary/10 transition-all duration-500 ease-in-out border-secondary ut-button:bg-primary/75 ut-button:ut-readying:bg-secondary "
+                onUploadError={(error) => {
+                  console.log(error);
+                  setError("variantImages", {
+                    type: "validate",
+                    message: error.message,
+                  });
+                  return;
+                }}
                 onBeforeUploadBegin={(files) => {
                   files.map((file) =>
                     append({
@@ -61,16 +68,16 @@ const VariantImages = () => {
                 }}
                 onClientUploadComplete={(files) => {
                   const images = getValues("variantImages");
-                  images.map((field, imgIndex) => {
+                  images.map((field, imgIDX) => {
                     if (field.url.search("blob:") === 0) {
                       const image = files.find(
                         (img) => img.name === field.name
                       );
                       if (image) {
-                        update(imgIndex, {
+                        update(imgIDX, {
                           url: image.url,
-                          size: image.size,
                           name: image.name,
+                          size: image.size,
                           key: image.key,
                         });
                       }
@@ -78,14 +85,8 @@ const VariantImages = () => {
                   });
                   return;
                 }}
-                onUploadError={(error) => {
-                  setError("variantImages", {
-                    type: "validate",
-                    message: error.message,
-                  });
-                  return;
-                }}
                 config={{ mode: "auto" }}
+                endpoint="variantUploader"
               />
             </FormControl>
             <FormMessage />
@@ -93,7 +94,7 @@ const VariantImages = () => {
         )}
       />
       <div className="rounded-md overflow-x-auto">
-        <Table className="my-4">
+        <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Order</TableHead>
@@ -107,9 +108,9 @@ const VariantImages = () => {
             as="tbody"
             values={fields}
             onReorder={(e) => {
-              const activeItem = fields[active];
+              const activeElement = fields[active];
               e.map((item, index) => {
-                if (item === activeItem) {
+                if (item === activeElement) {
                   move(active, index);
                   setActive(index);
                   return;
@@ -122,9 +123,9 @@ const VariantImages = () => {
               return (
                 <Reorder.Item
                   as="tr"
+                  key={field.id}
                   value={field}
                   id={field.id}
-                  key={field.id}
                   onDragStart={() => setActive(index)}
                   className={cn(
                     field.url.search("blob:") === 0
@@ -133,7 +134,7 @@ const VariantImages = () => {
                     "text-sm font-bold text-muted-foreground hover:text-primary"
                   )}
                 >
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{index}</TableCell>
                   <TableCell>{field.name}</TableCell>
                   <TableCell>
                     {(field.size / (1024 * 1024)).toFixed(2)} MB
@@ -151,14 +152,14 @@ const VariantImages = () => {
                   </TableCell>
                   <TableCell>
                     <Button
-                      className="scale-75"
-                      variant="destructive"
+                      variant={"ghost"}
                       onClick={(e) => {
                         e.preventDefault();
                         remove(index);
                       }}
+                      className="scale-75"
                     >
-                      <Trash className="w-4" />
+                      <Trash className="h-4" />
                     </Button>
                   </TableCell>
                 </Reorder.Item>
@@ -169,6 +170,4 @@ const VariantImages = () => {
       </div>
     </div>
   );
-};
-
-export default VariantImages;
+}

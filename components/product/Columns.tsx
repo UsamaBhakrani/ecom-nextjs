@@ -100,7 +100,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
                       <div
                         className="w-5 h-5 rounded-full"
                         key={variant.id}
-                        style={{ background: `${variant.color}` }}
+                        style={{ backgroundColor: `${variant.color}` }}
                       />
                     </ProductVariant>
                   </TooltipTrigger>
