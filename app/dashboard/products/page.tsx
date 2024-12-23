@@ -2,7 +2,6 @@ import { db } from "@/server";
 import placeHolder from "@/public/placeholder_small.jpg";
 import { DataTable } from "@/components/product/DataTable";
 import { columns } from "@/components/product/Columns";
-import { variantImages } from "@/server/schema";
 
 export default async function Products() {
   const products = await db.query.products.findMany({

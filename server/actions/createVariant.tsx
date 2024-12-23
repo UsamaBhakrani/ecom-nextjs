@@ -11,8 +11,16 @@ import {
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { variantSchema } from "@/types/dashboardTypes";
+import algoliasearch from "algoliasearch";
 
 const safeActionClient = createSafeActionClient();
+
+const client = algoliasearch(
+  process.env.NEXT_PUBLIC_ALGOLIA_ID!,
+  process.env.ALGOLIA_ADMIN!
+);
+
+const algoliaIndex = client.initIndex("products");
 
 export const createVariant = safeActionClient(
   variantSchema,
@@ -53,6 +61,15 @@ export const createVariant = safeActionClient(
             order: idx,
           }))
         );
+
+        // Algolia indexing
+        await algoliaIndex.saveObject({
+          objectID: editVariant[0].id.toString(),
+          id: editVariant[0].productID,
+          productType: editVariant[0].productType,
+          variantImages: newImgs[0].url,
+        });
+
         revalidatePath("/dashboard/products");
         return { success: `Edited ${productType}` };
       }
@@ -66,15 +83,18 @@ export const createVariant = safeActionClient(
             productID,
           })
           .returning();
-        await db.query.products.findFirst({
+
+        const product = await db.query.products.findFirst({
           where: eq(products.id, productID),
         });
+
         await db.insert(variantTags).values(
           tags.map((tag: any) => ({
             tag,
             variantID: newVariant[0].id,
           }))
         );
+
         await db.insert(variantImages).values(
           newImgs.map((img: any, idx: any) => ({
             name: img.name,
@@ -84,6 +104,19 @@ export const createVariant = safeActionClient(
             order: idx,
           }))
         );
+
+        // Algolia Index
+        if (product) {
+          await algoliaIndex.saveObject({
+            objectID: newVariant[0].id.toString(),
+            id: newVariant[0].productID,
+            title: product.title,
+            price: product.price,
+            productType: newVariant[0].productType,
+            variantImages: newImgs[0].url,
+          });
+        }
+
         revalidatePath("/dashboard/products");
         return { success: `Added ${productType}` };
       }
