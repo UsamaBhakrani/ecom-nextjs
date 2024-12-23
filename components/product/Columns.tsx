@@ -98,9 +98,9 @@ export const columns: ColumnDef<ProductColumn>[] = [
                       editMode={true}
                     >
                       <div
-                        className="w-5 h-5 rounded-full"
+                        className="w-6 h-6 rounded-full"
                         key={variant.id}
-                        style={{ background: variant.color }}
+                        style={{ background: variant?.color }}
                       />
                     </ProductVariant>
                   </TooltipTrigger>

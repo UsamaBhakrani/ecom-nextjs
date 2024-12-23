@@ -102,12 +102,12 @@ export const ProductVariant = forwardRef<HTMLDivElement, VariantProps>(
     });
 
     const variantAction = useAction(deleteVariant, {
-      // onExecute() {
-      //   toast.loading("Deleting variant", { duration: 1 });
-      //   setOpen(false);
-      // },
+      onExecute() {
+        toast.loading("Deleting variant", { duration: 1 });
+        setOpen(false);
+      },
       // onSuccess(data) {
-      //   if (data?.) {
+      //   if (data?.error) {
       //     toast.error(data.error);
       //   }
       //   if (data?.success) {
@@ -117,6 +117,9 @@ export const ProductVariant = forwardRef<HTMLDivElement, VariantProps>(
     });
 
     function onSubmit(values: z.infer<typeof variantSchema>) {
+      // Do something with the form values.
+      // ✅ This will be type-safe and validated.
+
       execute(values);
     }
 
