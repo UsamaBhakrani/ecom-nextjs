@@ -1,11 +1,16 @@
 import { db } from "@/server";
-import { products, productVariants } from "@/server/schema";
+import { productVariants } from "@/server/schema";
 import { eq } from "drizzle-orm";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 
-const SingleProductPage = async ({ params, searchParams }: Params) => {
+const SingleProductPage = async ({
+  searchParams,
+  params,
+}: SearchParamProps) => {
   const product = await db.query.productVariants.findMany({
-    where: eq(productVariants.productID, parseInt(searchParams.productID)),
+    where: eq(
+      productVariants.productID,
+      parseInt(searchParams?.productID as string)
+    ),
   });
   console.log(product);
 
