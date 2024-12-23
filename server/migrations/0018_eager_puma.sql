@@ -1,0 +1,1 @@
+ALTER TABLE "productVariants" ALTER COLUMN "price" DROP NOT NULL;

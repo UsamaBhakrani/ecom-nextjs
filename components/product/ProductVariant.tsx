@@ -50,6 +50,7 @@ export const ProductVariant = forwardRef<HTMLDivElement, VariantProps>(
         id: undefined,
         productID,
         productType: "Black Notebook",
+        price: "",
       },
     });
 
@@ -64,8 +65,9 @@ export const ProductVariant = forwardRef<HTMLDivElement, VariantProps>(
         form.setValue("editMode", true);
         form.setValue("id", variant.id);
         form.setValue("productID", variant.productID);
-        form.setValue("productType", variant.productType);
+        form.setValue("productType", variant.productType!);
         form.setValue("color", variant.color);
+        form.setValue("price", variant.price.toString());
         form.setValue(
           "tags",
           variant.variantTags.map((tag) => tag.tag)
@@ -180,6 +182,23 @@ export const ProductVariant = forwardRef<HTMLDivElement, VariantProps>(
                         onChange={(e) => field.onChange(e)}
                       />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Pick a price for your variant"
+                        {...field}
+                      />
+                    </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}

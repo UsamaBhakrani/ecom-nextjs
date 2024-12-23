@@ -119,7 +119,8 @@ export const products = pgTable("products", {
 export const productVariants = pgTable("productVariants", {
   id: serial("id").primaryKey(),
   color: text("color").notNull(),
-  productType: text("price").notNull(),
+  productType: text("productType").notNull(),
+  price: real("price").notNull(),
   created_at: timestamp("created_at", { mode: "date" }).defaultNow(),
   updated_at: timestamp("updated_at", { mode: "date" }).defaultNow(),
   productID: serial("productID")

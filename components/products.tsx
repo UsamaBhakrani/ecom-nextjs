@@ -40,7 +40,8 @@ const Products = ({ variants }: ProductTypes) => {
               </div>
               <div className="">
                 <Badge className="text-sm" variant="secondary">
-                  {formatPrice(variant.product.price)}
+                  {formatPrice(variant.price)}
+                  {/* {formatPrice(variant.product.price)} */}
                 </Badge>
               </div>
             </div>

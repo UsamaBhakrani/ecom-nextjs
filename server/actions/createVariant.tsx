@@ -32,6 +32,7 @@ export const createVariant = safeActionClient(
     productType,
     tags,
     variantImages: newImgs,
+    price,
   }) => {
     try {
       if (editMode && id) {
@@ -78,6 +79,7 @@ export const createVariant = safeActionClient(
         const newVariant = await db
           .insert(productVariants)
           .values({
+            price,
             color,
             productType,
             productID,
