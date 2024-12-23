@@ -12,7 +12,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -103,17 +102,17 @@ export const ProductVariant = forwardRef<HTMLDivElement, VariantProps>(
 
     const variantAction = useAction(deleteVariant, {
       onExecute() {
-        toast.loading("Deleting variant", { duration: 1 });
+        toast.loading("Deleting variant", { duration: 500 });
         setOpen(false);
       },
-      // onSuccess(data) {
-      //   if (data?.error) {
-      //     toast.error(data.error);
-      //   }
-      //   if (data?.success) {
-      //     toast.success(data.success);
-      //   }
-      // },
+      onSuccess(data) {
+        if (data?.error) {
+          toast.error(data.error);
+        }
+        if (data?.success) {
+          toast.success(data.success);
+        }
+      },
     });
 
     function onSubmit(values: z.infer<typeof variantSchema>) {
