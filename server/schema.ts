@@ -8,6 +8,7 @@ import {
   pgEnum,
   serial,
   real,
+  index,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "next-auth/adapters";
 import { createId } from "@paralleldrive/cuid2";
@@ -120,7 +121,7 @@ export const productVariants = pgTable("productVariants", {
   id: serial("id").primaryKey(),
   color: text("color").notNull(),
   productType: text("productType").notNull(),
-  price: real("price").notNull(),
+  price: text("price").notNull(),
   created_at: timestamp("created_at", { mode: "date" }).defaultNow(),
   updated_at: timestamp("updated_at", { mode: "date" }).defaultNow(),
   productID: serial("productID")
@@ -153,6 +154,7 @@ export const variantTags = pgTable("variantTags", {
 
 export const productRelations = relations(products, ({ many }) => ({
   productVariants: many(productVariants, { relationName: "productVariants" }),
+  reviews: many(reviews, { relationName: "product_reviews" }),
 }));
 
 export const productVariantsRelations = relations(
@@ -185,4 +187,46 @@ export const variantTagsRelations = relations(variantTags, ({ many, one }) => ({
     fields: [variantTags.variantID],
     references: [productVariants.id],
   }),
+}));
+
+export const reviews = pgTable(
+  "reviews",
+  {
+    id: serial("id").primaryKey(),
+    rating: real("rating").notNull(),
+    userID: text("userID")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    productID: serial("productID")
+      .notNull()
+      .references(() => products.id, {
+        onDelete: "cascade",
+      }),
+    comment: text("comment").notNull(),
+    created_at: timestamp("created_at", { mode: "date" }).defaultNow(),
+    updated_at: timestamp("updated_at", { mode: "date" }).defaultNow(),
+  },
+  (table) => {
+    return {
+      productIdx: index("productIdx").on(table.productID),
+      userIdx: index("userIdx").on(table.userID),
+    };
+  }
+);
+
+export const reviewRelations = relations(reviews, ({ one }) => ({
+  user: one(users, {
+    fields: [reviews.userID],
+    references: [users.id],
+    relationName: "user_reviews",
+  }),
+  product: one(products, {
+    fields: [reviews.productID],
+    references: [products.id],
+    relationName: "product_reviews",
+  }),
+}));
+
+export const userRelations = relations(reviews, ({ many }) => ({
+  reviews: many(reviews, { relationName: "user_reviews" }),
 }));
