@@ -58,3 +58,13 @@ export const variantSchema = z.object({
     )
     .min(1, { message: "You must provide at least one image" }),
 });
+
+export const reviewsSchema = z.object({
+  comment: z
+    .string()
+    .min(10, { message: "comment must be at least 10 characters long" }),
+  rating: z
+    .number()
+    .min(1)
+    .max(5, { message: "Rating must be between 1 and 5" }),
+});
