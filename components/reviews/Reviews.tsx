@@ -3,12 +3,11 @@ import Review from "./Review";
 import ReviewsForm from "./ReviewsForm";
 import { desc, eq } from "drizzle-orm";
 import { reviews } from "@/server/schema";
+import ReviewChart from "./ReviewChart";
 
 const Reviews = async ({ productID }: { productID: number }) => {
   const data = await db.query.reviews.findMany({
-    with: {
-      user: true,
-    },
+    with: { user: true },
     where: eq(reviews.productID, productID),
     orderBy: [desc(reviews.created_at)],
   });
@@ -22,6 +21,7 @@ const Reviews = async ({ productID }: { productID: number }) => {
         </div>
         <div className="flex-1 flex flex-col gap-2">
           <ReviewsForm />
+          <ReviewChart reviews={data} />
         </div>
       </div>
     </section>
