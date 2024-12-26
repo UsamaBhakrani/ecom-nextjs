@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Card } from "../ui/card";
 import Image from "next/image";
 import { formatDateTime } from "@/lib/utils";
+import Stars from "./Stars";
 
 const Review = ({ reviews }: { reviews: ReviewsWithUser[] }) => {
   return (
@@ -16,13 +17,13 @@ const Review = ({ reviews }: { reviews: ReviewsWithUser[] }) => {
                 className="rounded-full"
                 width={32}
                 height={32}
-                alt={review.user?.name!}
+                alt={reviews.user?.name!}
                 src={review.user?.image!}
               />
               <div className="">
                 <p className="text-sm font-bold">{review.user.name}</p>
                 <div className="flex items-center gap-2">
-                  <h1>stars</h1>
+                  <Stars rating={review.rating} />
                   <p className="text-xs text-bold text-muted-foreground">
                     {formatDateTime(review.created_at!).dateTime}
                   </p>
