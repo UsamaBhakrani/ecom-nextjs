@@ -48,13 +48,36 @@ export type ReviewsWithUser = InferResultType<
   }
 >;
 
-//   export type TotalOrders = InferResultType<
-//     "orderProduct",
-//     {
-//       order: { with: { user: true } }
-//       product: true
-//       productVariants: {
-//         with: { variantImages: true }
-//       }
-//     }
-//   >
+// export type TotalOrders = InferResultType<
+//   "orderProduct",
+//   {
+//     order: { with: { user: true } };
+//     product: true;
+//     productVariants: {
+//       with: { variantImages: true };
+//     };
+//   }
+// >;
+
+export type UsersWithReviews = {
+  id: number;
+  rating: number;
+  userID: string;
+  productID: number;
+  comment: string;
+  created_at: Date;
+  updated_at: Date;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    emailVerified: null;
+    image: string;
+    password: null;
+    twoFactorEnabled: boolean;
+    role: string;
+    created_at: null;
+    updated_at: null;
+    last_login_at: null;
+  };
+};

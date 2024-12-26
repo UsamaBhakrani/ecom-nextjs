@@ -1,14 +1,14 @@
 "use client";
 
 import { Dispatch, forwardRef, SetStateAction, useState } from "react";
-import { Input, InputProps } from "../ui/input";
+import { Input } from "../ui/input";
 import { useFormContext } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Badge } from "../ui/badge";
 import { XIcon } from "lucide-react";
 
-type InputTagsProps = InputProps & {
+type InputTagsProps = {
   value: string[];
   onChange: Dispatch<SetStateAction<string[]>>;
 };

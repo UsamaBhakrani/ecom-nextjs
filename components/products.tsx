@@ -40,7 +40,7 @@ const Products = ({ variants }: ProductTypes) => {
               </div>
               <div className="">
                 <Badge className="text-sm" variant="secondary">
-                  {formatPrice(variant.price)}
+                  {formatPrice(parseInt(variant.price))}
                   {/* {formatPrice(variant.product.price)} */}
                 </Badge>
               </div>

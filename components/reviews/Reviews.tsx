@@ -11,7 +11,6 @@ const Reviews = async ({ productID }: { productID: number }) => {
     where: eq(reviews.productID, productID),
     orderBy: [desc(reviews.created_at)],
   });
-
   return (
     <section className="py-8">
       <h2 className="text-2xl font-bold mb-4">Product Reviews</h2>

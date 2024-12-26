@@ -6,7 +6,7 @@ import Image from "next/image";
 import { formatDateTime } from "@/lib/utils";
 import Stars from "./Stars";
 
-const Review = ({ reviews }: { reviews: ReviewsWithUser[] }) => {
+export default function Review({ reviews }: { reviews: any[] }) {
   return (
     <motion.div className="flex flex-col gap-4">
       {reviews.map((review) => {
@@ -17,8 +17,8 @@ const Review = ({ reviews }: { reviews: ReviewsWithUser[] }) => {
                 className="rounded-full"
                 width={32}
                 height={32}
-                alt={reviews.user?.name!}
-                src={review.user?.image!}
+                alt={review.user.name!}
+                src={review?.user.image}
               />
               <div className="">
                 <p className="text-sm font-bold">{review.user.name}</p>
@@ -36,6 +36,4 @@ const Review = ({ reviews }: { reviews: ReviewsWithUser[] }) => {
       })}
     </motion.div>
   );
-};
-
-export default Review;
+}
