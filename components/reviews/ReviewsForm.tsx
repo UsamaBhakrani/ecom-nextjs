@@ -44,9 +44,9 @@ const ReviewsForm = () => {
 
   const { execute, status } = useAction(addReview, {
     onSuccess: (data) => {
-      console.log(data);
       if (data.error) {
         toast.error(data.error);
+        form.reset();
       }
       if (data.success) {
         toast.success(data.success);
