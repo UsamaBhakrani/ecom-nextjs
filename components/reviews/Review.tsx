@@ -1,12 +1,12 @@
 "use client";
-import { ReviewsWithUser } from "@/lib/inferTypes";
+import { ReviewsWithUser, UsersWithReviews } from "@/lib/inferTypes";
 import { motion } from "framer-motion";
 import { Card } from "../ui/card";
 import Image from "next/image";
 import { formatDateTime } from "@/lib/utils";
 import Stars from "./Stars";
 
-export default function Review({ reviews }: { reviews: any[] }) {
+export default function Review({ reviews }: { reviews: UsersWithReviews[] }) {
   return (
     <motion.div className="flex flex-col gap-4">
       {reviews.map((review) => {
@@ -17,7 +17,7 @@ export default function Review({ reviews }: { reviews: any[] }) {
                 className="rounded-full"
                 width={32}
                 height={32}
-                alt={review.user.name!}
+                alt={review.user.name}
                 src={review?.user.image}
               />
               <div className="">
