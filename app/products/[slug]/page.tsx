@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { formatPrice } from "@/lib/formatPrice";
 import ProductPicker from "@/components/ProductPicker";
 import ProductCarousel from "@/components/ProductCarousel";
+import Reviews from "@/components/reviews/Reviews";
 
 export const generateStaticParams = async () => {
   const data = await db.query.productVariants.findMany({
@@ -53,7 +54,7 @@ const SingleProductPage = async ({ params }: { params: { slug: string } }) => {
             </div>
             <Separator className="my-2" />
             <p className="text-2xl py-2 font-medium">
-              {formatPrice(variant.price)}
+              {formatPrice(variant.product.price)}
             </p>
             <div
               dangerouslySetInnerHTML={{ __html: variant.product.description }}
@@ -77,6 +78,7 @@ const SingleProductPage = async ({ params }: { params: { slug: string } }) => {
             </div>
           </div>
         </section>
+        <Reviews productID={variant.productID} />
       </main>
     );
   }

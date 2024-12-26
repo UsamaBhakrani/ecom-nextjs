@@ -60,6 +60,7 @@ export const variantSchema = z.object({
 });
 
 export const reviewsSchema = z.object({
+  productID: z.number(),
   comment: z
     .string()
     .min(10, { message: "comment must be at least 10 characters long" }),

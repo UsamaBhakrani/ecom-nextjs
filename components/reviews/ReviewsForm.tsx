@@ -26,6 +26,9 @@ import { reviewsSchema } from "@/types/dashboardTypes";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAction } from "next-safe-action/hooks";
+import { addReview } from "@/server/actions/addReview";
+import { toast } from "sonner";
 const ReviewsForm = () => {
   const searchParams = useSearchParams();
   const productID = Number(searchParams.get("productID"));
@@ -35,11 +38,33 @@ const ReviewsForm = () => {
     defaultValues: {
       comment: "",
       rating: 0,
+      productID,
     },
   });
 
-  const onSubmit = (values: z.infer<typeof reviewsSchema>) => {
-    console.log(values);
+  const { execute, status } = useAction(addReview, {
+    onSuccess: (data) => {
+      console.log(data);
+      if (data.error) {
+        toast.error(data.error);
+      }
+      if (data.success) {
+        toast.success(data.success);
+        form.reset();
+      }
+    },
+  });
+
+  const onSubmit = ({
+    comment,
+    rating,
+    productID,
+  }: z.infer<typeof reviewsSchema>) => {
+    execute({
+      comment,
+      rating,
+      productID,
+    });
   };
 
   return (
@@ -66,12 +91,13 @@ const ReviewsForm = () => {
                       placeholder="How would you describe this product?"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="comment"
+              name="rating"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Leave your rating</FormLabel>
@@ -89,12 +115,16 @@ const ReviewsForm = () => {
                         >
                           <Star
                             key={value}
-                            onClick={() => form.setValue("rating", value)}
+                            onClick={() =>
+                              form.setValue("rating", value, {
+                                shouldValidate: true,
+                              })
+                            }
                             className={cn(
                               "text-primary bg-transparent transition-all duration-300 ease-in-out",
                               form.getValues("rating") >= value
-                                ? "text-primary"
-                                : "text-muted"
+                                ? "fill-primary"
+                                : "fill-muted"
                             )}
                           />
                         </motion.div>
@@ -104,8 +134,12 @@ const ReviewsForm = () => {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">
-              Add Review
+            <Button
+              className="w-full"
+              type="submit"
+              disabled={status === "executing"}
+            >
+              {status === "executing" ? "Adding Review..." : "Add Review"}
             </Button>
           </form>
         </Form>
