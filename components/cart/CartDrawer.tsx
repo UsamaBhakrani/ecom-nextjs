@@ -15,6 +15,7 @@ import {
 import { Button } from "../ui/button";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
+import CartItems from "./CartItems";
 const CartDrawer = () => {
   const { cart } = useCartStore();
   return (
@@ -38,14 +39,15 @@ const CartDrawer = () => {
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-          <DrawerDescription>This action cannot be undone.</DrawerDescription>
+          <DrawerTitle>
+            <h1>Cart Stuff</h1>
+          </DrawerTitle>
         </DrawerHeader>
         <DrawerFooter>
+          <CartItems />
           <Button>Checkout</Button>
-          <DrawerClose>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
+          <Button variant="outline">Cancel</Button>
+          <DrawerClose></DrawerClose>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

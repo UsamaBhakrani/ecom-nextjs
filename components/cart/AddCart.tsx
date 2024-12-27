@@ -17,13 +17,6 @@ const AddCart = () => {
   const title = searchParams.get("title");
   const image = searchParams.get("image");
   const price = Number(searchParams.get("price"));
-  const [item, setItem] = useState<CartItem>({
-    id: productID,
-    variant: { variantID: id, quantity },
-    image: image!,
-    name: title + type!,
-    price: price!,
-  });
 
   if (!id || !productID || !type || !title || !image || !price) {
     toast.error("Product not found");
@@ -59,7 +52,13 @@ const AddCart = () => {
         className="my-4 mt-4"
         onClick={() => {
           toast.success(`Added ${title + " " + type} to your cart`);
-          addToCart(item);
+          addToCart({
+            id: productID,
+            variant: { variantID: id, quantity },
+            image: image!,
+            name: title + type!,
+            price: price!,
+          });
         }}
       >
         Add to Cart
