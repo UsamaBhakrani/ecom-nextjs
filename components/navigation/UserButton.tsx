@@ -31,7 +31,7 @@ const UserButton = ({ user, expires }: Session) => {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger>
-        <Avatar>
+        <Avatar className="w-8 h-8">
           {user?.image && (
             <AvatarImage
               src={user.image}
