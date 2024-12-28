@@ -19,7 +19,8 @@ import Lottie from "lottie-react";
 import emptyCart from "@/public/empty-box1.json";
 import { Button } from "../ui/button";
 const CartItems = () => {
-  const { cart, addToCart, removeFromCart } = useCartStore();
+  const { cart, addToCart, removeFromCart, setCheckoutProgress } =
+    useCartStore();
   const totalPrice = useMemo(() => {
     return cart.reduce(
       (acc, item) => acc + item.price * item.variant.quantity,
@@ -138,7 +139,11 @@ const CartItems = () => {
           </AnimatePresence>
         </motion.div>
       )}
-      <Button disabled={cart.length === 0} className="max-w-md w-full">
+      <Button
+        disabled={cart.length === 0}
+        className="max-w-md w-full"
+        onClick={() => setCheckoutProgress("payment-page")}
+      >
         Checkout
       </Button>
     </motion.div>
