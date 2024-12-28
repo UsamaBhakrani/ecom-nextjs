@@ -17,6 +17,7 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Lottie from "lottie-react";
 import emptyCart from "@/public/empty-box1.json";
+import { Button } from "../ui/button";
 const CartItems = () => {
   const { cart, addToCart, removeFromCart } = useCartStore();
   const totalPrice = useMemo(() => {
@@ -33,7 +34,7 @@ const CartItems = () => {
   }, [totalPrice]);
 
   return (
-    <motion.div>
+    <motion.div className="flex flex-col items-center">
       {cart.length === 0 && (
         <div className="flex flex-col w-full items-center justify-center">
           <motion.div
@@ -49,71 +50,73 @@ const CartItems = () => {
         </div>
       )}
       {cart.length > 0 && (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Product</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Image</TableHead>
-              <TableHead>Quantity</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {cart.map((item) => {
-              return (
-                <TableRow key={item.id}>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{formatPrice(item.price)}</TableCell>
-                  <TableCell>
-                    <div>
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        priority
-                        height={48}
-                        width={48}
-                        className="rounded-md"
-                      />
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-between">
-                      <MinusCircle
-                        className="cursor-pointer hover:text-muted-foreground duration-300 transition-colors"
-                        size={14}
-                        onClick={() =>
-                          removeFromCart({
-                            ...item,
-                            variant: {
-                              quantity: 1,
-                              variantID: item.variant.variantID,
-                            },
-                          })
-                        }
-                      />
-                      <p className="text-md font-bold">
-                        {item.variant.quantity}
-                      </p>
-                      <PlusCircle
-                        className="cursor-pointer hover:text-muted-foreground duration-300 transition-colors"
-                        size={14}
-                        onClick={() =>
-                          addToCart({
-                            ...item,
-                            variant: {
-                              quantity: 1,
-                              variantID: item.variant.variantID,
-                            },
-                          })
-                        }
-                      />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+        <div className="h-80 overflow-y-auto">
+          <Table className="max-w-2xl mx-auto">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Product</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Image</TableHead>
+                <TableHead>Quantity</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {cart.map((item) => {
+                return (
+                  <TableRow key={item.id}>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{formatPrice(item.price)}</TableCell>
+                    <TableCell>
+                      <div>
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          priority
+                          height={48}
+                          width={48}
+                          className="rounded-md"
+                        />
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center justify-between">
+                        <MinusCircle
+                          className="cursor-pointer hover:text-muted-foreground duration-300 transition-colors"
+                          size={14}
+                          onClick={() =>
+                            removeFromCart({
+                              ...item,
+                              variant: {
+                                quantity: 1,
+                                variantID: item.variant.variantID,
+                              },
+                            })
+                          }
+                        />
+                        <p className="text-md font-bold">
+                          {item.variant.quantity}
+                        </p>
+                        <PlusCircle
+                          className="cursor-pointer hover:text-muted-foreground duration-300 transition-colors"
+                          size={14}
+                          onClick={() =>
+                            addToCart({
+                              ...item,
+                              variant: {
+                                quantity: 1,
+                                variantID: item.variant.variantID,
+                              },
+                            })
+                          }
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
       )}
       {cart.length > 0 && (
         <motion.div className="flex items-center justify-center overflow-hidden relative my-4">
@@ -135,6 +138,9 @@ const CartItems = () => {
           </AnimatePresence>
         </motion.div>
       )}
+      <Button disabled={cart.length === 0} className="max-w-md w-full">
+        Checkout
+      </Button>
     </motion.div>
   );
 };
