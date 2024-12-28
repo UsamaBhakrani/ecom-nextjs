@@ -37,18 +37,15 @@ const CartDrawer = () => {
           </AnimatePresence>
         </div>
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className="min-h-50vh">
         <DrawerHeader>
-          <DrawerTitle>
-            <h1>Cart Stuff</h1>
+          <DrawerTitle className="flex items-center justify-center">
+            <h1>Cart Progress</h1>
           </DrawerTitle>
         </DrawerHeader>
-        <DrawerFooter>
+        <div className="overflow-auto p-4">
           <CartItems />
-          <Button>Checkout</Button>
-          <Button variant="outline">Cancel</Button>
-          <DrawerClose></DrawerClose>
-        </DrawerFooter>
+        </div>
       </DrawerContent>
     </Drawer>
   );

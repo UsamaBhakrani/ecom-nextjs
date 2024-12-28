@@ -51,12 +51,12 @@ const AddCart = () => {
       <Button
         className="my-4 mt-4"
         onClick={() => {
-          toast.success(`Added ${title + " " + type} to your cart`);
+          toast.success(`Added ${title + "  " + type} to your cart`);
           addToCart({
             id: productID,
             variant: { variantID: id, quantity },
             image: image!,
-            name: title + type!,
+            name: title + " " + type!,
             price: price!,
           });
         }}

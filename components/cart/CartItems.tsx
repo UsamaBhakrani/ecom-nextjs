@@ -14,7 +14,9 @@ import { CartItem, useCartStore } from "@/store";
 import { MinusCircle, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { useMemo, useState } from "react";
-
+import { AnimatePresence, motion } from "framer-motion";
+import Lottie from "lottie-react";
+import emptyCart from "@/public/empty-box1.json";
 const CartItems = () => {
   const { cart, addToCart, removeFromCart } = useCartStore();
   const totalPrice = useMemo(() => {
@@ -24,9 +26,28 @@ const CartItems = () => {
     );
   }, [cart]);
 
+  const priceInLetters = useMemo(() => {
+    return [...totalPrice.toFixed(2).toString()].map((letter) => {
+      return { letter, id: Math.random() };
+    });
+  }, [totalPrice]);
+
   return (
-    <div>
-      {cart.length === 0 && <div className="">Cart is empty</div>}
+    <motion.div>
+      {cart.length === 0 && (
+        <div className="flex flex-col w-full items-center justify-center">
+          <motion.div
+            animate={{ opacity: 1 }}
+            initial={{ opacity: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
+            <h2 className="text-2xl text-muted-foreground text-center">
+              Your cart is empty
+            </h2>
+            <Lottie animationData={emptyCart} className="h-64" />
+          </motion.div>
+        </div>
+      )}
       {cart.length > 0 && (
         <Table>
           <TableHeader>
@@ -94,7 +115,27 @@ const CartItems = () => {
           </TableBody>
         </Table>
       )}
-    </div>
+      {cart.length > 0 && (
+        <motion.div className="flex items-center justify-center overflow-hidden relative my-4">
+          <span className="text-md">Total: $</span>
+          <AnimatePresence mode="popLayout">
+            {priceInLetters.map((letter, index) => (
+              <motion.div key={letter.id}>
+                <motion.span
+                  className="text-md inline-block"
+                  initial={{ y: 20 }}
+                  animate={{ y: 0 }}
+                  exit={{ y: -20 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  {letter.letter}
+                </motion.span>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      )}
+    </motion.div>
   );
 };
 
