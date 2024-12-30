@@ -13,6 +13,7 @@ import {
 import type { AdapterAccount } from "next-auth/adapters";
 import { createId } from "@paralleldrive/cuid2";
 import { relations } from "drizzle-orm";
+import { ProductVariant } from "@/components/product/ProductVariant";
 
 export const RoleEnum = pgEnum("roles", ["user", "admin"]);
 
@@ -229,4 +230,37 @@ export const reviewRelations = relations(reviews, ({ one }) => ({
 
 export const userRelations = relations(reviews, ({ many }) => ({
   reviews: many(reviews, { relationName: "user_reviews" }),
+  orderProduct: many(orderProduct, { relationName: "orderProduct" }),
 }));
+
+export const orders = pgTable("orders", {
+  id: serial("id").primaryKey(),
+  userID: text("userID")
+    .notNull()
+    .references(() => users.id, {
+      onDelete: "cascade",
+    }),
+  total: real("total").notNull(),
+  status: text("status").notNull(),
+  receiptURL: text("receiptURL").notNull(),
+  created_at: timestamp("created_at", { mode: "date" }).defaultNow(),
+});
+
+export const orderRelations = relations(orders, ({ one, many }) => ({
+  user: one(users, {
+    fields: [orders.userID],
+    references: [users.id],
+    relationName: "user_orders",
+  }),
+}));
+
+export const orderProduct = pgTable("orderProduct", {
+  id: serial("id").primaryKey(),
+  quantity: integer("quantity").notNull(),
+  productVariantID: serial("productVariantID")
+    .notNull()
+    .references(() => productVariants.id, { onDelete: "cascade" }),
+  productID: serial("productID")
+    .notNull()
+    .references(() => products.id, { onDelete: "cascade" }),
+});
