@@ -31,6 +31,7 @@ export const users = pgTable("user", {
   created_at: timestamp("created_at", { mode: "date" }),
   updated_at: timestamp("updated_at", { mode: "date" }),
   last_login_at: timestamp("last_login_at", { mode: "date" }),
+  customerID: text("customerID"),
 });
 
 export const accounts = pgTable(

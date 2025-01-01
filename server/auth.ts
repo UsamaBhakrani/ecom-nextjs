@@ -26,6 +26,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         email: user.email!,
         name: user.name!,
       });
+      await db
+        .update(users)
+        .set({ customerID: customer.id })
+        .where(eq(users.id, user.id!));
     },
   },
   callbacks: {
