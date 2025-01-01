@@ -169,6 +169,13 @@
       "when": 1735554535926,
       "tag": "0023_married_dreadnoughts",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "6",
+      "when": 1735748600187,
+      "tag": "0024_illegal_zaran",
+      "breakpoints": true
     }
   ]
 }

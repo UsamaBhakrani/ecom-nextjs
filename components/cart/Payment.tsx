@@ -10,7 +10,6 @@ const Payment = () => {
   const totalPrice = cart.reduce((acc, item) => {
     return (acc + item.price * item.variant.quantity) * 100;
   }, 0);
-  console.log(totalPrice);
   return (
     <motion.div>
       <Elements
