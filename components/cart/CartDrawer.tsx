@@ -13,6 +13,7 @@ import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 import CartItems from "./CartItems";
 import CartMessage from "./CartMessage";
+import Payment from "./Payment";
 const CartDrawer = () => {
   const { cart, checkoutProgress, setCheckoutProgress } = useCartStore();
   return (
@@ -42,6 +43,7 @@ const CartDrawer = () => {
         </DrawerHeader>
         <div className="overflow-auto p-4">
           {checkoutProgress === "cart-page" && <CartItems />}
+          {checkoutProgress === "payment-page" && <Payment />}
         </div>
       </DrawerContent>
     </Drawer>
