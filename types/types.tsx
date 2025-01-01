@@ -27,3 +27,27 @@ export const resetSchema = z.object({
   email: z.string().email({ message: "Please input a valid email address" }),
 });
 
+export const reviewsSchema = z.object({
+  productID: z.number(),
+  comment: z
+    .string()
+    .min(10, { message: "comment must be at least 10 characters long" }),
+  rating: z
+    .number()
+    .min(1)
+    .max(5, { message: "Rating must be between 1 and 5" }),
+});
+
+export const paymentIntentSchema = z.object({
+  amount: z.number(),
+  currency: z.string(),
+  cart: z.array(
+    z.object({
+      title: z.string(),
+      price: z.number(),
+      quantity: z.number(),
+      image: z.string(),
+      productID: z.number(),
+    })
+  ),
+});
