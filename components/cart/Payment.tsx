@@ -8,7 +8,7 @@ const stripe = getStripe();
 const Payment = () => {
   const { cart } = useCartStore();
   const totalPrice = cart.reduce((acc, item) => {
-    return acc + item.price * item.variant.quantity;
+    return (acc + item.price * item.variant.quantity) * 100;
   }, 0);
   console.log(totalPrice);
   return (
