@@ -19,7 +19,7 @@ const PaymentForm = ({ totalPrice }: { totalPrice: number }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const stripe = useStripe();
   const elements = useElements();
-  const { cart, setCheckoutProgress } = useCartStore();
+  const { cart, setCheckoutProgress, clearCart } = useCartStore();
 
   const { execute, status } = useAction(createOrder, {
     onSuccess: (data) => {
@@ -32,6 +32,7 @@ const PaymentForm = ({ totalPrice }: { totalPrice: number }) => {
         toast.success(data.success);
         setIsLoading(false);
         setErrorMessage("");
+        clearCart();
         setCheckoutProgress("confirmation-page");
       }
     },
