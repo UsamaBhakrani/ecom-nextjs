@@ -1,9 +1,25 @@
-import React from 'react'
+import { db } from "@/server";
+import { auth } from "@/server/auth";
+import { orders } from "@/server/schema";
+import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
 
-const OrdersPage = () => {
-  return (
-    <div>OrdersPage</div>
-  )
-}
+const OrdersPage = async () => {
+  const user = await auth();
+  if (!user) return { redirect: "/login" };
 
-export default OrdersPage
+  const userOrders = await db.query.orders.findMany({
+    where: eq(orders.userID, user.user.id),
+    with: {
+      // orderProduct: {
+      //   with: {
+      //     product: true,
+      //     productVariants: true,
+      //   },
+      // },
+    },
+  });
+  return <div>OrdersPage</div>;
+};
+
+export default OrdersPage;
