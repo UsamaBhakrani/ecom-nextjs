@@ -10,13 +10,32 @@ import {
 import { Button } from "../ui/button";
 import { FormEvent, useState } from "react";
 import { createPaymentIntent } from "@/server/actions/createPaymentIntent";
+import { useAction } from "next-safe-action/hooks";
+import { createOrder } from "@/server/actions/createOrder";
+import { toast } from "sonner";
 
 const PaymentForm = ({ totalPrice }: { totalPrice: number }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const stripe = useStripe();
   const elements = useElements();
-  const { cart } = useCartStore();
+  const { cart, setCheckoutProgress } = useCartStore();
+
+  const { execute, status } = useAction(createOrder, {
+    onSuccess: (data) => {
+      if (data.error) {
+        toast.error(data.error);
+        setIsLoading(false);
+        setErrorMessage(data.error);
+      }
+      if (data.success) {
+        toast.success(data.success);
+        setIsLoading(false);
+        setErrorMessage("");
+        setCheckoutProgress("confirmation-page");
+      }
+    },
+  });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -66,7 +85,15 @@ const PaymentForm = ({ totalPrice }: { totalPrice: number }) => {
         return;
       } else {
         setIsLoading(false);
-        console.log("save the order");
+        execute({
+          status: "pending",
+          total: totalPrice,
+          products: cart.map((item) => ({
+            productID: item.id,
+            variantID: item.variant.variantID,
+            quantity: item.variant.quantity,
+          })),
+        });
       }
     }
   };
@@ -75,8 +102,11 @@ const PaymentForm = ({ totalPrice }: { totalPrice: number }) => {
     <form onSubmit={handleSubmit}>
       <PaymentElement />
       <AddressElement options={{ mode: "shipping" }} />
-      <Button disabled={!stripe || !elements}>
-        <span>Pay now</span>
+      <Button
+        className="max-w-md my-4 w-full"
+        disabled={!stripe || !elements || isLoading}
+      >
+        {isLoading ? "Processing..." : "Pay Now"}
       </Button>
     </form>
   );
