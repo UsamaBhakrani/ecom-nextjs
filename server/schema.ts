@@ -243,7 +243,7 @@ export const orders = pgTable("orders", {
     }),
   total: real("total").notNull(),
   status: text("status").notNull(),
-  receiptURL: text("receiptURL").notNull(),
+  receiptURL: text("receiptURL"),
   created_at: timestamp("created_at", { mode: "date" }).defaultNow(),
 });
 
