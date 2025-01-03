@@ -8,13 +8,13 @@ const stripe = getStripe();
 const Payment = () => {
   const { cart } = useCartStore();
   const totalPrice = cart.reduce((acc, item) => {
-    return (acc + item.price * item.variant.quantity) * 100;
+    return acc + item.price * item.variant.quantity;
   }, 0);
   return (
     <motion.div>
       <Elements
         stripe={stripe}
-        options={{ mode: "payment", currency: "usd", amount: totalPrice }}
+        options={{ mode: "payment", currency: "usd", amount: totalPrice * 100 }}
       >
         <PaymentForm totalPrice={totalPrice} />
       </Elements>
