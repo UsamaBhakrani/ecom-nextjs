@@ -253,6 +253,7 @@ export const orderRelations = relations(orders, ({ one, many }) => ({
     references: [users.id],
     relationName: "user_orders",
   }),
+  orderProduct: many(orderProduct, { relationName: "orderProduct" }),
 }));
 
 export const orderProduct = pgTable("orderProduct", {
