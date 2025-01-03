@@ -37,7 +37,7 @@ const CartDrawer = () => {
           </AnimatePresence>
         </div>
       </DrawerTrigger>
-      <DrawerContent className="min-h-50vh">
+      <DrawerContent className="fixed bottom-0 left-0 max-h-[70vh] min-h-[50vh]">
         <DrawerHeader>
           <DrawerTitle className="flex items-center justify-center">
             <CartMessage />

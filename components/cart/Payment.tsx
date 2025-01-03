@@ -11,7 +11,7 @@ const Payment = () => {
     return acc + item.price * item.variant.quantity;
   }, 0);
   return (
-    <motion.div>
+    <motion.div className="mx-auto max-w-2xl">
       <Elements
         stripe={stripe}
         options={{ mode: "payment", currency: "usd", amount: totalPrice * 100 }}

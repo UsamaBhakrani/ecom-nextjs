@@ -104,7 +104,7 @@ const PaymentForm = ({ totalPrice }: { totalPrice: number }) => {
       <PaymentElement />
       <AddressElement options={{ mode: "shipping" }} />
       <Button
-        className="max-w-md my-4 w-full"
+        className="max-w-2xl my-4 w-full"
         disabled={!stripe || !elements || isLoading}
       >
         {isLoading ? "Processing..." : "Pay Now"}

@@ -51,7 +51,7 @@ const CartItems = () => {
         </div>
       )}
       {cart.length > 0 && (
-        <div className="h-80 overflow-y-auto">
+        <div className="max-h-80 overflow-y-auto">
           <Table className="max-w-2xl mx-auto">
             <TableHeader>
               <TableRow>
@@ -64,7 +64,7 @@ const CartItems = () => {
             <TableBody>
               {cart.map((item) => {
                 return (
-                  <TableRow key={item.id}>
+                  <TableRow key={(item.id + item.variant.variantID).toString()}>
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{formatPrice(item.price)}</TableCell>
                     <TableCell>
