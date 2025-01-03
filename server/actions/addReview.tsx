@@ -1,6 +1,6 @@
 "use server";
 
-import { reviewsSchema } from "@/types/dashboardTypes";
+import { reviewsSchema } from "@/types/types";
 import { createSafeActionClient } from "next-safe-action";
 import { auth } from "../auth";
 import { db } from "..";
