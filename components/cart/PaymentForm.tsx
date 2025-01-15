@@ -108,7 +108,7 @@ const PaymentForm = ({ totalPrice }: { totalPrice: number }) => {
         className="max-w-2xl my-4 w-full"
         disabled={!stripe || !elements || isLoading}
       >
-        {isLoading ? "Processing..." : `Pay $${totalPrice}`}
+        {isLoading ? "Processing..." : `Pay $${totalPrice / 100}`}
       </Button>
     </form>
   );

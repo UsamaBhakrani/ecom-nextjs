@@ -11,7 +11,7 @@ const Payment = () => {
   const { cart } = useCartStore();
   const { theme } = useTheme();
   const totalPrice = cart.reduce((acc, item) => {
-    return acc + item.price * item.variant.quantity;
+    return (acc + item.price * item.variant.quantity) * 100;
   }, 0);
   return (
     <motion.div className="mx-auto max-w-2xl">
@@ -20,7 +20,7 @@ const Payment = () => {
         options={{
           mode: "payment",
           currency: "usd",
-          amount: totalPrice * 100,
+          amount: totalPrice,
           appearance: { theme: theme === "dark" ? "night" : "flat" },
         }}
       >
