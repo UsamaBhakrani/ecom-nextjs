@@ -10,7 +10,7 @@ const safeActionClient = createSafeActionClient();
 
 export const createOrder = safeActionClient(
   createOrderSchema,
-  async ({ products, status, total }) => {
+  async ({ products, status, total, paymentIntentID }) => {
     try {
       const user = await auth();
       if (!user) return { error: "User not found" };
@@ -20,6 +20,7 @@ export const createOrder = safeActionClient(
         .values({
           total,
           status,
+          paymentIntentID,
           userID: user.user.id,
         })
         .returning();

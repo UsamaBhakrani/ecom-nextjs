@@ -89,6 +89,7 @@ const PaymentForm = ({ totalPrice }: { totalPrice: number }) => {
         execute({
           status: "pending",
           total: totalPrice,
+          paymentIntentID: data.success.paymentIntentID,
           products: cart.map((item) => ({
             productID: item.id,
             variantID: item.variant.variantID,
