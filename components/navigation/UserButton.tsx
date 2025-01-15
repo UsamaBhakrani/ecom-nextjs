@@ -58,7 +58,7 @@ const UserButton = ({ user, expires }: Session) => {
               alt={user.name!}
               width={36}
               height={36}
-              className="rounded-full"
+              className="rounded-full h-10 w-10"
             />
           )}
           <p className="font-bold text-xs">{user?.name}</p>
