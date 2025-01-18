@@ -37,37 +37,46 @@ const Sales = ({ totalOrders }: { totalOrders: TotalOrders[] }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {totalOrders.map(({ order, products, quantity }) => (
-                <TableRow key={order.id}>
-                  {order.user ? (
-                    <div className="flex gap-2 items-center">
+              {totalOrders.map(
+                ({ order, products, quantity, productVariants }) => (
+                  <TableRow className="font-medium" key={order.id}>
+                    {order.user ? (
+                      <div className="flex gap-2 items-center">
+                        <Image
+                          src={order.user.image!}
+                          width={25}
+                          height={25}
+                          alt={order.user.name!}
+                          className="rounded-full h-8 w-8"
+                        />
+                        <TableCell>{order.user.name}</TableCell>
+                      </div>
+                    ) : (
+                      <div className="flex gap-2 items-center justify-center">
+                        <Image
+                          src={placeholderUser}
+                          width={25}
+                          height={25}
+                          alt="User not found"
+                          className="rounded-full h-8 w-8"
+                        />
+                        <TableCell>User not found</TableCell>
+                      </div>
+                    )}
+                    <TableCell>{products.title}</TableCell>
+                    <TableCell>${products.price}</TableCell>
+                    <TableCell>{quantity}</TableCell>
+                    <TableCell>
                       <Image
-                        src={order.user.image!}
-                        width={25}
-                        height={25}
-                        alt={order.user.name!}
-                        className="rounded-full h-8 w-8"
+                        src={productVariants.variantImages[0].url}
+                        alt={products.title}
+                        width={48}
+                        height={48}
                       />
-                      <TableCell>{order.user.name}</TableCell>
-                    </div>
-                  ) : (
-                    <div className="flex gap-2 items-center justify-center">
-                      <Image
-                        src={placeholderUser}
-                        width={25}
-                        height={25}
-                        alt="User not found"
-                        className="rounded-full h-8 w-8"
-                      />
-                      <TableCell>User not found</TableCell>
-                    </div>
-                  )}
-                  <TableCell>{products.title}</TableCell>
-                  <TableCell>${products.price}</TableCell>
-                  <TableCell>{quantity}</TableCell>
-                  <TableCell>{order.status}</TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                  </TableRow>
+                )
+              )}
             </TableBody>
           </Table>
         </CardContent>
