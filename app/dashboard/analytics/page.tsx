@@ -9,8 +9,11 @@ import {
 import { db } from "@/server";
 import { orderProduct } from "@/server/schema";
 import { desc } from "drizzle-orm";
+
 import Sales from "./Sales";
 import Earnings from "./Earnings";
+
+export const revalidate = 0;
 
 const AnalyticsPage = async () => {
   const totalOrders = await db.query.orderProduct.findMany({

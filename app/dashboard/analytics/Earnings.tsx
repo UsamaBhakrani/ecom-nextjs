@@ -14,6 +14,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import { weeklyChart } from "./weeklyChart";
 import { Bar, BarChart, ResponsiveContainer, Tooltip } from "recharts";
+import { monthlyChart } from "./monthlyChart";
 
 const Earnings = ({ totalOrders }: { totalOrders: TotalOrders[] }) => {
   const router = useRouter();
@@ -27,16 +28,31 @@ const Earnings = ({ totalOrders }: { totalOrders: TotalOrders[] }) => {
 
   const activeChart = useMemo(() => {
     const weekly = weeklyChart(chartItems);
+    const monthly = monthlyChart(chartItems);
 
     if (filter === "week") {
       return weekly;
     }
+    if (filter === "month") {
+      return monthly;
+    }
+  }, [filter]);
+
+  const activeTotal = useMemo(() => {
+    if (filter === "month") {
+      return monthlyChart(chartItems)
+        .reduce((sum, item) => (sum + item.revenue) / 100, 0)
+        .toFixed(2);
+    }
+    return weeklyChart(chartItems)
+      .reduce((sum, item) => (sum + item.revenue) / 100, 0)
+      .toFixed(2);
   }, [filter]);
 
   return (
-    <Card>
+    <Card className="flex-1 shrink-0 h-full">
       <CardHeader>
-        <CardTitle>Your Revenue: 0</CardTitle>
+        <CardTitle>Your Revenue: ${activeTotal}</CardTitle>
         <CardDescription>Heree are your recent earnings</CardDescription>
         <div className="flex items-center gap-2">
           <Badge
@@ -72,10 +88,10 @@ const Earnings = ({ totalOrders }: { totalOrders: TotalOrders[] }) => {
               <Bar dataKey="revenue" className="fill-primary" />
               <Tooltip
                 content={(props) => (
-                  <div>
+                  <div className="bg-white py-2 px-4 rounded-md shadow-lg">
                     {props.payload?.map((item) => (
                       <div key={item.payload.date}>
-                        <p>Revenue: ${item.value}</p>
+                        <p>Revenue: ${(item.value as number) / 100}</p>
                         <p>Date: {item.payload.date}</p>
                       </div>
                     ))}
