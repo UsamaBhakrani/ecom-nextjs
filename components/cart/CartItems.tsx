@@ -139,13 +139,15 @@ const CartItems = () => {
           </AnimatePresence>
         </motion.div>
       )}
-      <Button
-        disabled={cart.length === 0}
-        className="max-w-md w-full"
-        onClick={() => setCheckoutProgress("payment-page")}
-      >
-        Checkout
-      </Button>
+      {cart.length > 0 ? (
+        <Button
+          disabled={cart.length === 0}
+          className="max-w-md w-full"
+          onClick={() => setCheckoutProgress("payment-page")}
+        >
+          Checkout
+        </Button>
+      ) : null}
     </motion.div>
   );
 };
