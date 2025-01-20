@@ -15,6 +15,7 @@ import CartItems from "./CartItems";
 import CartMessage from "./CartMessage";
 import Payment from "./Payment";
 import OrderConfirmed from "./OrderConfirmed";
+import CartProgress from "./CartProgress";
 const CartDrawer = () => {
   const { cart, checkoutProgress, setCheckoutProgress, cartOpen, setCartOpen } =
     useCartStore();
@@ -43,6 +44,7 @@ const CartDrawer = () => {
             <CartMessage />
           </DrawerTitle>
         </DrawerHeader>
+        <CartProgress />
         <div className="overflow-auto p-4">
           {checkoutProgress === "cart-page" && <CartItems />}
           {checkoutProgress === "payment-page" && <Payment />}
