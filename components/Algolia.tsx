@@ -6,12 +6,29 @@ import searchClient from "@/lib/algoliaClient";
 import Link from "next/link";
 import Image from "next/image";
 import { Card } from "./ui/card";
-
+import { useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 const Algolia = () => {
+  const [active, setActive] = useState(false);
+
+  const MCard = useMemo(() => motion(Card), []);
   return (
-    <InstantSearchNext indexName="products" searchClient={searchClient}>
-      <div className="">
+    <InstantSearchNext
+      future={{
+        persistHierarchicalRootCount: true,
+        preserveSharedStateOnUnmount: true,
+      }}
+      indexName="products"
+      searchClient={searchClient}
+    >
+      <div className="relative">
         <SearchBox
+          onFocus={() => setActive(true)}
+          onBlur={() => {
+            setTimeout(() => {
+              setActive(false);
+            }, 100);
+          }}
           classNames={{
             input:
               "h-full w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
@@ -20,9 +37,18 @@ const Algolia = () => {
             resetIcon: "hidden",
           }}
         />
-        <Card className="">
-          <Hits hitComponent={Hit} className="rounded-md" />
-        </Card>
+        <AnimatePresence>
+          {active && (
+            <MCard
+              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="absolute w-full z-50 overflow-y-scroll h-96"
+            >
+              <Hits hitComponent={Hit} className="rounded-md" />
+            </MCard>
+          )}
+        </AnimatePresence>
       </div>
     </InstantSearchNext>
   );
@@ -45,7 +71,7 @@ function Hit({
         fullyHighlighted: boolean;
         matchedWords: string[];
       };
-      objectID: {
+      productType: {
         value: string;
         matchLevel: string;
         fullyHighlighted: boolean;
@@ -54,21 +80,29 @@ function Hit({
     };
   };
 }) {
-  if (hit._highlightResult.title.matchLevel === "none") {
-    return null;
-  }
   return (
-    <div className="">
+    <div className="p-4 mb-2 hover:bg-secondary">
       <Link
         href={`/products/${hit.objectID}?id=${hit.objectID}&productID=${hit.id}&price=${hit.price}&title=${hit.title}&type=${hit.productType}&image=${hit.variantImages[0]}&variantID=${hit.objectID}`}
       >
-        <div className="">
+        <div className="flex w-full gap-12 items-center justify-between">
           <Image
             src={hit.variantImages}
             alt={hit.title}
-            width={100}
-            height={100}
+            width={60}
+            height={60}
           />
+          <p
+            dangerouslySetInnerHTML={{
+              __html: hit._highlightResult.title.value,
+            }}
+          />
+          {/* <p
+            dangerouslySetInnerHTML={{
+              __html: hit._highlightResult.productType.value,
+            }}
+          /> */}
+          <p className="font-medium">${hit.price}</p>
         </div>
       </Link>
     </div>
