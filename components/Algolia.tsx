@@ -1,9 +1,11 @@
 "use client";
 
 import { InstantSearchNext } from "react-instantsearch-nextjs";
-import { SearchBox } from "react-instantsearch";
+import { Hits, SearchBox } from "react-instantsearch";
 import searchClient from "@/lib/algoliaClient";
 import Link from "next/link";
+import Image from "next/image";
+import { Card } from "./ui/card";
 
 const Algolia = () => {
   return (
@@ -18,6 +20,9 @@ const Algolia = () => {
             resetIcon: "hidden",
           }}
         />
+        <Card className="">
+          <Hits hitComponent={Hit} className="rounded-md" />
+        </Card>
       </div>
     </InstantSearchNext>
   );
@@ -32,7 +37,7 @@ function Hit({
     price: number;
     title: string;
     productType: string;
-    variantImages: string[];
+    variantImages: string;
     _highlightResult: {
       title: {
         value: string;
@@ -40,7 +45,7 @@ function Hit({
         fullyHighlighted: boolean;
         matchedWords: string[];
       };
-      productType: {
+      objectID: {
         value: string;
         matchLevel: string;
         fullyHighlighted: boolean;
@@ -49,17 +54,23 @@ function Hit({
     };
   };
 }) {
-  if (
-    hit._highlightResult.title.matchLevel === "none" &&
-    hit._highlightResult.productType.matchLevel === "none"
-  ) {
+  if (hit._highlightResult.title.matchLevel === "none") {
     return null;
   }
   return (
     <div className="">
       <Link
         href={`/products/${hit.objectID}?id=${hit.objectID}&productID=${hit.id}&price=${hit.price}&title=${hit.title}&type=${hit.productType}&image=${hit.variantImages[0]}&variantID=${hit.objectID}`}
-      ></Link>
+      >
+        <div className="">
+          <Image
+            src={hit.variantImages}
+            alt={hit.title}
+            width={100}
+            height={100}
+          />
+        </div>
+      </Link>
     </div>
   );
 }
