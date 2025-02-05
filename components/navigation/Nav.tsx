@@ -10,7 +10,7 @@ const Nav = async () => {
   return (
     <header className="py-8">
       <nav>
-        <ul className="flex justify-between gap-4 items-center md:gap-8 md:flex-row">
+        <ul className="flex justify-between gap-2 items-center md:gap-8 md:flex-row">
           <li className="flex flex-1">
             <Link href="/" aria-label="Ecom logo">
               <Logo />
@@ -21,9 +21,9 @@ const Nav = async () => {
           </li>
           {!session ? (
             <li className="flex items-center justify-center">
-              <Button asChild className="flex gap-2">
+              <Button asChild className="flex gap-1">
                 <Link href="/auth/login">
-                  <LogIn size={16} />
+                  <LogIn size={12} />
                   <span>Login</span>
                 </Link>
               </Button>
