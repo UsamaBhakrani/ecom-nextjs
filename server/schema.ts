@@ -13,7 +13,6 @@ import {
 import type { AdapterAccount } from "next-auth/adapters";
 import { createId } from "@paralleldrive/cuid2";
 import { relations } from "drizzle-orm";
-import { ProductVariant } from "@/components/product/ProductVariant";
 
 export const RoleEnum = pgEnum("roles", ["user", "admin"]);
 
