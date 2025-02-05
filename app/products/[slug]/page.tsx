@@ -72,9 +72,9 @@ const SingleProductPage = async ({ params }: { params: { slug: string } }) => {
             </p>
             <div
               dangerouslySetInnerHTML={{ __html: variant.product.description }}
-            ></div>
+            />
             <p className="text-secondary-foreground font-medium my-2">
-              Avilabale Colors
+              Available Colors
             </p>
             <div className="flex gap-4">
               {variant.product.productVariants.map((prodVariant) => (
