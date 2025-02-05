@@ -13,7 +13,11 @@ const Nav = async () => {
         <ul className="flex justify-between gap-2 items-center md:gap-8 md:flex-row">
           <li className="flex flex-1">
             <Link href="/" aria-label="Ecom logo">
-              <Logo />
+              {/* <Logo /> */}
+              <p className="font-extrabold uppercase">
+                Sprout{" "}
+                <span className="font-medium text-purple-500">Scrible</span>
+              </p>
             </Link>
           </li>
           <li className="relative flex items-center hover:bg-muted">
